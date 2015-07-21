@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>    
+    <head>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, 
+	↵initial-scale=1">
+	    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	    <script src="vendor/bootsrap/bootsrap.js"></script>
+	    <script src="vendor/angular.js"></script>
+	    <script src="vendor/angular-route.js"></script>
+	    <script src="code/main.js"></script>
+	    <script src="code/schedule/scheduleController.js"></script>
+	    <title>Schedule</title>
+    </head>
+
+    <body ng-app="scheduleOfTeam">
+	    <ol>
+	        <a class="btn-date" href="#/">Sign-in</a>
+	        <a class="btn-date" href="#/Users">Users</a>
+	        <a class="btn-date" href="#/Schedule">Schedule</a>
+	    </ol>
+        <div ng-view></div>
+    </body>
+</html>
