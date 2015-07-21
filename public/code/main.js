@@ -19,4 +19,4 @@ angular.module('scheduleOfTeam', ['ngRoute'])
   //        controllerAs: 'ctrl'
       })      
       .otherwise({redirectTo: '/Schedule'});
-  });x
+  });
