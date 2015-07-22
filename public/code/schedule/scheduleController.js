@@ -64,7 +64,7 @@ angular.module('scheduleOfTeam')
             init();
         };
         //function to delete a task
-        this.delete = function(task_id, enteredMonth, enteredDay, enteredYear) {
+        this.delete = function(task_id) {
             var deleteTaskID = {'deleteID': task_id};
             var scheduleOfTeamArray = self.taskListArray;
             //variable 'deleteId'to delete a task from controller
