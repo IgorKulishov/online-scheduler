@@ -3,6 +3,7 @@ angular.module('scheduleOfTeam')
        // var idGenerator = 0; is not used
         var self = this;
         var message = [];
+        //used for add a task function;
         var enteredMonth;
         var enteredDay;
         var enteredYear;
@@ -10,15 +11,14 @@ angular.module('scheduleOfTeam')
         //function to read 'list' array of tasks from file in data folder           
         var taskListArrayRead = function(month, day,  year) {
             jsonService.readList(month, day, year).then(function(response) {
-                self.taskListArray = response.data;    
+                self.taskListArray = response.data;
                 //need to add  function to find bigest 'task_id' number from array to replace idGenerator=1 number            
             }, function(errResponse) {
                     for (var key in errResponse)
                         alert(' Error while fetching notes ' + errResponse[key]);
                 }
             );
-        };
-        taskListArrayRead();
+        };        
         
         this.chooseDate = function(date) {
             taskListArrayRead(date.month, date.day, date.year);   
@@ -64,16 +64,21 @@ angular.module('scheduleOfTeam')
             init();
         };
         //function to delete a task
-        this.delete = function(task_id) {
+        this.delete = function(task_id, enteredMonth, enteredDay, enteredYear) {
             var deleteTaskID = {'deleteID': task_id};
             var scheduleOfTeamArray = self.taskListArray;
+            //variable 'deleteId'to delete a task from controller
             var deleteId;
+            //cycle to find requested task in 'scheduleOfTeamArray'
+            for (var i = 0; i < scheduleOfTeamArray.length; i++) {
+                if (scheduleOfTeamArray[i].task_id === task_id)
+                    deleteId = i;
+            }
+            //delete a requested task from 'scheduleOfTeamArray' array in controller
+            self.taskListArray.splice(deleteId, 1);
             jsonService.deleteTask(deleteTaskID).then(function(response, err) {
-                for (var i = 0; i < scheduleOfTeamArray.length; i++) {
-                    if (scheduleOfTeamArray[i].task_id === response.data.task_id)
-                        deleteID = i;
-                }
-                self.taskListArray.splice(deleteID, 1);
+                if (err)
+                    alert(err);
             });
         };
         //this function is to edit a Task
@@ -93,7 +98,7 @@ angular.module('scheduleOfTeam')
                 }
             }
             this.taskListArray[toSaveElementNumber].isEditing = false;
-            jsonService.saveTask(this.taskListArray[toSaveElementNumber]).then(
+            jsonService.saveTask(scheduleOfTeamArray[toSaveElementNumber]).then(
                 function(response) {
                     
                 },
@@ -102,19 +107,8 @@ angular.module('scheduleOfTeam')
                 }
             );
         };
-        //to indicate Progress of a Boolean in a Task when clicked [v] button in user's menu to change Progress of a Task            
-        this.booleanCheck = function(task_id) {
-            alert(task_id);
-            var checkedId = {'task_id': task_id};
-            jsonService.changeProgressInfo(checkedId).then(function(response) {
-                alert(response.data);
-            });
-        };
     })
     .factory("jsonService", ['$http', '$q', function($http, $q) {
-        //array of tasks in service 
-        //  var list;
-        //return array to controller and than to "todoListController" in html
         return {readList: function(month, day, year) {
             var res = {
                     method: 'GET',                    
@@ -124,7 +118,7 @@ angular.module('scheduleOfTeam')
             }, addNewTask: function(newTask) {
                 var req = {
                     method: 'POST',
-                    url: 'http://localhost:3000/rest/todo',
+                    url: '/rest/todo',
                     data: newTask,
                     headers: {'Content-Type': 'application/json'}
                 };
@@ -132,15 +126,15 @@ angular.module('scheduleOfTeam')
             }, deleteTask: function(deleteTaskNumber) {
                 var req = {
                     method: 'DELETE',
-                    url: 'http://localhost:3000/rest/todo/' + deleteTaskNumber.deleteID,
+                    url: '/rest/todo/' + deleteTaskNumber.deleteID,
                     headers: {'Content-Type': 'application/json'}
                 };
                 return $http(req);
             }, saveTask: function(saveTask) {
                 var req = {
                     method: 'PUT',
-                    url: 'http://localhost:3000/rest/todo/' + saveTask.task_id,
-                    data: saveTask,                    
+                    url: '/rest/todo/' + saveTask.task_id,
+                    data: saveTask,
                     headers: {'Content-Type': 'application/json'}
                 };
                 return $q(function(resolve, reject) {
@@ -149,17 +143,7 @@ angular.module('scheduleOfTeam')
                     } else {
                         reject($http(req))
                     }
-                });                    
-            }, changeProgressInfo: function(CheckById) {
-
-            var res = {
-                    method: 'PUT',                    
-                    url: 'http://localhost:3000/rest/todo/checkid',
-                    data: CheckById,
-                    headers: { "Content-Type": 'application/json' }
-                };  
-                alert(res.data.task_id);
-                return $http(res);                
+                });
             }
         };         
     }]);
