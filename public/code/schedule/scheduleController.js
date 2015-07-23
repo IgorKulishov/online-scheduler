@@ -33,7 +33,7 @@ angular.module('scheduleOfTeam')
             self.newTask.isEditing = false;
             
             //presentation object is in data/TaskList.txt file
-            $http.get('rest/initList.json').then(function(response) {
+            $http.get('code/schedule/rest/initList.json').then(function(response) {
                 self.newTask.username = response.data.username;
                 self.newTask.priority = response.data.priority;
                 self.newTask.type = response.data.type;
