@@ -3,10 +3,10 @@
 var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/mops_db', function() {
-    console.log('connected to database');
+    console.log('connected to database for default templates');
 });
 
-var newTask = mongoose.Schema({
+var defaultTask = mongoose.Schema({
     "username": String,
     "day": Number,
     "month": Number,
@@ -17,4 +17,4 @@ var newTask = mongoose.Schema({
     "existName": Boolean
 });
 
-module.exports = mongoose.model('NewTask', newTask);
+module.exports = mongoose.model('DefaultTask', defaultTask);

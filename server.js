@@ -1,7 +1,10 @@
+'use strict'
+
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var newSchedTask = require('./server/components/newUserTask');
+var defaultTask = require('./server/components/defaultTask');
 
 app.use(bodyParser.json());
 //path to html and assigning
@@ -14,14 +17,26 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
     var day = parseInt(req.params.day);
     var year = parseInt(req.params.year);
     var response = [];
+    var defaultTaskErrorMessage = new defaultTask({
+        "username": 'There_is_no_task',
+        "day": 0,
+        "month": 0,
+        "year": 0,
+        "task": 'please_create_a_task',
+        "start": 1,
+        "finish": 2,
+        "existName": false        
+    });
+
     newSchedTask.find(function(err, tasks) {
         //if error
         if (err) {
-            console.log(err)
+            console.error(err);
         }
         //if no tasks
         if (!tasks) {
-            res.send(defaultTaskErrorMessage);
+            console.error("Data base is empty. There is no tasks for the moment");
+            res.send('no records');
         }
         //respond if there are tasks 
         if (tasks) {
@@ -30,6 +45,11 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
                     response.push(tasks[i]);
                 }
             }
+            if (response.length === 0) {
+                console.log('there is no record for the day');
+                res.send(defaultTaskErrorMessage);
+            }
+
             console.log(response);
             res.send(response);
         }
@@ -38,18 +58,18 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
 //get respond all records
 app.get('/rest/todo', function(req, res, next) {
     newSchedTask.find(function(err, tasks) {
-        if (err) { console.log(err)}
+        if (err) { console.error(err); }
         console.log(tasks);
-        res.send(tasks);    
+        res.send(tasks);
     });
 });
 //adding a new task
 app.post('/rest/todo', function(req, res, next) {
     var newTask = req.body;
-    //var taskArray = [];
+    
     newSchedTask.find(function(err, tasks) {
-        if (err) { console.log(err) }
-        taskArray = tasks;
+        if (err) { console.error(err); }
+    
         //newTaskUser to save to db mops_db:
         var newUserTask = new newSchedTask({
             "username": newTask.username,
@@ -63,7 +83,7 @@ app.post('/rest/todo', function(req, res, next) {
         });
         //save data to db
         newUserTask.save(function(err, newUserTask) {
-            if (err) { console.log(err)}
+            if (err) { console.error(err); }
             console.log(newUserTask);
             res.send(newUserTask);
         });
@@ -85,7 +105,7 @@ app.put('/rest/todo/:id', function(req, res, next) {
     console.log(updateId);
     newSchedTask.update({"_id": updateId}, {"$set": newUserTaskUpdate}, function(err, updateTask) {
         if (err) { 
-            console.log(err);
+            console.error(err);
             res.status(err);
         } else {
             res.send(newUserTaskUpdate);
@@ -98,11 +118,11 @@ app.delete('/rest/todo/:id', function(req, res, next) {
     var deleteTaskId = req.params.id;
     //poll all data to find the 'id'
     newSchedTask.find(function(err, tasks) {
-        if (err) { console.log(err) }
+        if (err) { console.error(err); }
         for (var i = 0; i < tasks.length; i++) {
             if (tasks[i]._id == deleteTaskId) {
                 newSchedTask.remove({"_id": deleteTaskId}, function(err, taskToDelete) {
-                    if (err) { console.log(err) }
+                    if (err) { console.error(err); }
                     console.log("Task with ID = " + deleteTaskId + " is deleted");
                     res.send({"_id" : deleteTaskId});
                 }, 1);                
