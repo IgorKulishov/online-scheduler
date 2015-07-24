@@ -2,8 +2,6 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var newSchedTask = require('./server/components/newUserTask');
-var taskIdGenerator = 0;
-var subTaskIdGenerator = 0;
 
 app.use(bodyParser.json());
 //path to html and assigning
@@ -18,12 +16,12 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
     var response = [];
     newSchedTask.find(function(err, tasks) {
         //if error
-        if (err) { 
+        if (err) {
             console.log(err)
         }
         //if no tasks
         if (!tasks) {
-            res.send(defaultTaskErrorMessage);    
+            res.send(defaultTaskErrorMessage);
         }
         //respond if there are tasks 
         if (tasks) {
@@ -52,13 +50,8 @@ app.post('/rest/todo', function(req, res, next) {
     newSchedTask.find(function(err, tasks) {
         if (err) { console.log(err) }
         taskArray = tasks;
-        if ((tasks.length) === 0)
-            taskIdGenerator = 0;
-        if ((tasks.length) > 0)
-            taskIdGenerator = tasks[(tasks.length - 1)].task_id + 1;
         //newTaskUser to save to db mops_db:
         var newUserTask = new newSchedTask({
-            "task_id": taskIdGenerator,
             "username": newTask.username,
             "day": newTask.day,
             "month": newTask.month,
@@ -77,7 +70,7 @@ app.post('/rest/todo', function(req, res, next) {
     });
 });
 //editing existing task
-//':id' is equivalent of ':task_id'
+//':id' is equivalent of ':_id'
 app.put('/rest/todo/:id', function(req, res, next) {
     var updateTask = req.body;
     console.log(updateTask);
@@ -86,12 +79,11 @@ app.put('/rest/todo/:id', function(req, res, next) {
         "task": updateTask.task,
         "start": updateTask.start,
         "finish": updateTask.finish,
-        "task_id": updateTask.task_id,
         "existName": updateTask.existName
     };
-    var updateId = parseInt(req.params.id);
+    var updateId = req.params.id;
     console.log(updateId);
-    newSchedTask.update({"task_id": updateId}, {"$set": newUserTaskUpdate}, function(err, updateTask) {
+    newSchedTask.update({"_id": updateId}, {"$set": newUserTaskUpdate}, function(err, updateTask) {
         if (err) { 
             console.log(err);
             res.status(err);
@@ -103,16 +95,16 @@ app.put('/rest/todo/:id', function(req, res, next) {
 }); 
 //delete an item from array
 app.delete('/rest/todo/:id', function(req, res, next) {
-    var deleteTaskId = parseInt(req.params.id);
+    var deleteTaskId = req.params.id;
     //poll all data to find the 'id'
     newSchedTask.find(function(err, tasks) {
         if (err) { console.log(err) }
         for (var i = 0; i < tasks.length; i++) {
-            if (tasks[i].task_id === deleteTaskId) {
-                newSchedTask.remove({"task_id": deleteTaskId}, function(err, taskToDelete) {
+            if (tasks[i]._id == deleteTaskId) {
+                newSchedTask.remove({"_id": deleteTaskId}, function(err, taskToDelete) {
                     if (err) { console.log(err) }
                     console.log("Task with ID = " + deleteTaskId + " is deleted");
-                    res.send({"id" : deleteTaskId});
+                    res.send({"_id" : deleteTaskId});
                 }, 1);                
                 break;
             }

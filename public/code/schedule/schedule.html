@@ -150,15 +150,15 @@
 	            </div>
 				<!--DELETE button-->
 				<div class="col-md-1 col6">
-				    <button type="button" class="btn btn-danger" ng-click="ctrl.delete(taskRecord.task_id)">Delete</button>
+				    <button type="button" class="btn btn-danger" ng-click="ctrl.delete(taskRecord._id)">Delete</button>
 				</div>				
 			    <!--Edit button-->
 				<div class="col-md-1 col7" ng-if="!taskRecord.isEditing">
-				    <button type="button" class="btn btn-primary" ng-click="ctrl.edit(taskRecord.task_id)">Edit</button>
+				    <button type="button" class="btn btn-primary" ng-click="ctrl.edit(taskRecord._id)">Edit</button>
 				</div>
                 <!--Save button-->
 				<div class="col-md-1 col7" ng-if="taskRecord.isEditing">
-				    <button type="button" class="btn" ng-click="ctrl.save(taskRecord.task_id)">Save</button>
+				    <button type="button" class="btn" ng-click="ctrl.save(taskRecord._id)">Save</button>
 				</div>
 		    </div>
 		    <nav class="navbar navbar-default">

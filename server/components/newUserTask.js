@@ -5,7 +5,6 @@ mongoose.connect('mongodb://localhost/mops_db', function() {
 });
 
 var newTask = mongoose.Schema({
-    "task_id": Number,
     "username": String,
     "day": Number,
     "month": Number,

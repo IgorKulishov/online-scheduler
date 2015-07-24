@@ -12,7 +12,7 @@ angular.module('scheduleOfTeam')
         var taskListArrayRead = function(month, day,  year) {
             jsonService.readList(month, day, year).then(function(response) {
                 self.taskListArray = response.data;
-                //need to add  function to find bigest 'task_id' number from array to replace idGenerator=1 number            
+                //need to add  function to find bigest '_id' number from array to replace idGenerator=1 number            
             }, function(errResponse) {
                     for (var key in errResponse)
                         alert(' Error while fetching notes ' + errResponse[key]);
@@ -64,14 +64,14 @@ angular.module('scheduleOfTeam')
             init();
         };
         //function to delete a task
-        this.delete = function(task_id) {
-            var deleteTaskID = {'deleteID': task_id};
+        this.delete = function(_id) {
+            var deleteTaskID = {'deleteID': _id};
             var scheduleOfTeamArray = self.taskListArray;
             //variable 'deleteId'to delete a task from controller
             var deleteId;
             //cycle to find requested task in 'scheduleOfTeamArray'
             for (var i = 0; i < scheduleOfTeamArray.length; i++) {
-                if (scheduleOfTeamArray[i].task_id === task_id)
+                if (scheduleOfTeamArray[i]._id === _id)
                     deleteId = i;
             }
             //delete a requested task from 'scheduleOfTeamArray' array in controller
@@ -82,18 +82,18 @@ angular.module('scheduleOfTeam')
             });
         };
         //this function is to edit a Task
-        this.edit = function(task_id) {
+        this.edit = function(_id) {
             for (var i = 0; i < this.taskListArray.length; i++) {
-                if (this.taskListArray[i].task_id == task_id)
+                if (this.taskListArray[i]._id == _id)
                     this.taskListArray[i].isEditing = true;
             }
         };
         //this function is to Save edited Task
-        this.save = function(task_id) {
+        this.save = function(_id) {
             var scheduleOfTeamArray = this.taskListArray;
             var toSaveElementNumber;
             for (var i = 0; i < scheduleOfTeamArray.length; i++) {
-                if (scheduleOfTeamArray[i].task_id === task_id) {
+                if (scheduleOfTeamArray[i]._id === _id) {
                     toSaveElementNumber = i;                    
                 }
             }
@@ -133,7 +133,7 @@ angular.module('scheduleOfTeam')
             }, saveTask: function(saveTask) {
                 var req = {
                     method: 'PUT',
-                    url: '/rest/todo/' + saveTask.task_id,
+                    url: '/rest/todo/' + saveTask._id,
                     data: saveTask,
                     headers: {'Content-Type': 'application/json'}
                 };
