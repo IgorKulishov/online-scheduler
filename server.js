@@ -5,6 +5,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var newSchedTask = require('./server/components/newUserTask');
 var defaultTask = require('./server/components/defaultTask');
+var wrongDate = require('./server/components/wrongDate');
 
 app.use(bodyParser.json());
 //path to html and assigning
@@ -16,17 +17,12 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
     var month = parseInt(req.params.month);
     var day = parseInt(req.params.day);
     var year = parseInt(req.params.year);
+    if (isNaN(month) || isNaN(day) || isNaN(year)) {
+        console.error("moonth is not a number");
+        res.send(404, wrongDate);
+    }
     var response = [];
-    var defaultTaskErrorMessage = new defaultTask({
-        "username": 'There_is_no_task',
-        "day": 0,
-        "month": 0,
-        "year": 0,
-        "task": 'please_create_a_task',
-        "start": 1,
-        "finish": 2,
-        "existName": false        
-    });
+    var defaultTaskErrorMessage = defaultTask;
 
     newSchedTask.find(function(err, tasks) {
         //if error
@@ -38,21 +34,24 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
             console.error("Data base is empty. There is no tasks for the moment");
             res.send('no records');
         }
+
         //respond if there are tasks 
-        if (tasks) {
+        if (tasks.length > 0) {
             for (var i = 0; i < tasks.length; i++) {
                 if ((tasks[i].month === month) && (tasks[i].day === day) && (tasks[i].year)) {
                     response.push(tasks[i]);
                 }
             }
-            if (response.length === 0) {
-                console.log('there is no record for the day');
-                res.send(defaultTaskErrorMessage);
+            if (response.length > 0) {
+                console.log(response);
+                res.send(response);
+            } else {
+                //probably better create separate field in UI for such error messages
+                console.log('there is no task for the date');
+                res.send(defaultTaskErrorMessage);                
             }
+        } 
 
-            console.log(response);
-            res.send(response);
-        }
     });
 });
 //get respond all records
