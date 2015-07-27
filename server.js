@@ -5,12 +5,8 @@ var app = express();
 var bodyParser = require('body-parser');
 //model with tasks
 var newSchedTask = require('./server/components/newUserTask');
-//response if schedule for the date does not exist
-var defaultTaskErrorMessage = require('./server/components/defaultTask');
-//response if a wrong format of request (Ex.: mm/dd/yyyy = '1/1/!@#%')
-var wrongDateFormat = require('./server/components/wrongDateFormat');
-//response if a wrong date (Ex.: 0>mm>12; 0>dd>31; 0>yyyy>9999);
-var wrongDate = require('./server/components/wrongDate');
+//response for all errors including empty tasks, wrong dates, wrong formats
+var errorMessage = require('./server/components/errorMessages');
 
 app.use(bodyParser.json());
 app.set('port', process.env.PORT || 3000);
@@ -25,12 +21,12 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
     //checks if format of request is correct;
     if (isNaN(month) || isNaN(day) || isNaN(year)) {
         console.error("not a number, please put correct date");
-        res.send(404, wrongDateFormat);
+        res.send(404, {'message': errorMessage.wrongDateFormat});
     };
     //check if dates interval is correct;
     if ((month < 1) || (month > 12) || (day < 1) || (day > 31) || (year > 9999) || (year < 1)) {
         console.error("date does not exist, please put correct date");
-        res.send(404, wrongDate);
+        res.send(404, {'message': errorMessage.wrongDateRange});
     };
     //respond: list of tasks for a day;        
     newSchedTask.find({'month': month, 'day': day, 'year': year}, function(err, response) {
@@ -43,8 +39,8 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
             console.log(response);
         } else {
             //response if task for a day does not exist yet;
-            res.send(defaultTaskErrorMessage);
-            console.log(defaultTaskErrorMessage);
+            res.send({'message': errorMessage.emptyTask});
+            console.log(errorMessage.emptyTask);
         }
     });
 });
@@ -69,8 +65,7 @@ app.post('/rest/todo', function(req, res, next) {
             "year": newTask.year,
             "task": newTask.task,
             "start": newTask.start,
-            "finish": newTask.finish,
-            "existName": newTask.existName
+            "finish": newTask.finish
         });
         //save data to db
         newUserTask.save(function(err, newUserTask) {
@@ -89,8 +84,7 @@ app.put('/rest/todo/:id', function(req, res, next) {
         "username": updateTask.username,
         "task": updateTask.task,
         "start": updateTask.start,
-        "finish": updateTask.finish,
-        "existName": updateTask.existName
+        "finish": updateTask.finish
     };
     var updateId = req.params.id;
     console.log(updateId);
@@ -113,7 +107,7 @@ app.delete('/rest/todo/:id', function(req, res, next) {
         newSchedTask.remove({'_id': deleteTaskId}, function(err, deleteTask) {
             if (err) { console.error(err); }
             console.log("Task with ID = " + deleteTaskId + " is deleted: " + deleteTask);
-            res.send({"_id" : deleteTaskId});            
+            res.send({"_id" : deleteTaskId});
         });
     });
 });

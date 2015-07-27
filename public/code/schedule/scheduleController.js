@@ -1,18 +1,27 @@
 angular.module('scheduleOfTeam')
     .controller("scheduleController", function(jsonService, $http) {
-       // var idGenerator = 0; is not used
         var self = this;
-        var message = [];
         //used for add a task function;
         var enteredMonth;
         var enteredDay;
         var enteredYear;
+        var existNameArray = [];
         
         //function to read 'list' array of tasks from file in data folder           
         var taskListArrayRead = function(month, day,  year) {
             jsonService.readList(month, day, year).then(function(response) {
+                // Array of tasks to show in UI;
                 self.taskListArray = response.data;
-                //need to add  function to find bigest '_id' number from array to replace idGenerator=1 number            
+                //the loop will show same username only once setting 'existName' = true;
+                if (self.taskListArray[0])
+                    self.taskListArray[0].existName = false;
+                if (self.taskListArray.length > 0) {
+                    for (var i = 1; i < self.taskListArray.length; i++)
+                        self.taskListArray[i].existName = true;
+                }
+                // if there is no tasks -> show message in UI;
+                if (!self.taskListArray._id) 
+                    self.message = response.data.message;
             }, function(errResponse) {
                     for (var key in errResponse)
                         alert(' Error while fetching notes ' + errResponse[key]);
@@ -37,8 +46,6 @@ angular.module('scheduleOfTeam')
                 self.newTask.username = response.data.username;
                 self.newTask.priority = response.data.priority;
                 self.newTask.type = response.data.type;
-                self.booleanProgress = response.data.booleanProgress;
-                self.newTask.percentageMessage = response.data.percentageMessage;
             }, function(errResponse) {
                 alert('Error while fetching notes');
             });
@@ -59,24 +66,18 @@ angular.module('scheduleOfTeam')
                 "finish" : taskToAdd.finish, "task" : taskToAdd.task,
                 "day": enteredDay, "month": enteredMonth, "year": enteredYear, "existName": existName
             }).then(function(response, err) {
-                self.taskListArray.push(response.data);
+                taskListArrayRead(enteredMonth, enteredDay, enteredYear);
+                if (err) {
+                    console.error(err); 
+                }
             });
             init();
         };
         //function to delete a task
         this.delete = function(_id) {
             var deleteTaskID = {'deleteID': _id};
-            var scheduleOfTeamArray = self.taskListArray;
-            //variable 'deleteId'to delete a task from controller
-            var deleteId;
-            //cycle to find requested task in 'scheduleOfTeamArray'
-            for (var i = 0; i < scheduleOfTeamArray.length; i++) {
-                if (scheduleOfTeamArray[i]._id === _id)
-                    deleteId = i;
-            }
-            //delete a requested task from 'scheduleOfTeamArray' array in controller
-            self.taskListArray.splice(deleteId, 1);
             jsonService.deleteTask(deleteTaskID).then(function(response, err) {
+                taskListArrayRead(enteredMonth, enteredDay, enteredYear);
                 if (err)
                     alert(err);
             });
@@ -93,7 +94,7 @@ angular.module('scheduleOfTeam')
             var scheduleOfTeamArray = this.taskListArray;
             var toSaveElementNumber;
             for (var i = 0; i < scheduleOfTeamArray.length; i++) {
-                if (scheduleOfTeamArray[i]._id === _id) {
+                if (scheduleOfTeamArray[i]._id == _id) {
                     toSaveElementNumber = i;                    
                 }
             }
