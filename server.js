@@ -3,12 +3,16 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+//model with tasks
 var newSchedTask = require('./server/components/newUserTask');
-var defaultTask = require('./server/components/defaultTask');
+//response if schedule for the date does not exist
+var defaultTaskErrorMessage = require('./server/components/defaultTask');
+//response if a wrong format of request (Ex.: mm/dd/yyyy = '1/1/!@#%')
+var wrongDateFormat = require('./server/components/wrongDateFormat');
+//response if a wrong date (Ex.: 0>mm>12; 0>dd>31; 0>yyyy>9999);
 var wrongDate = require('./server/components/wrongDate');
 
 app.use(bodyParser.json());
-//path to html and assigning
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public'));
 
@@ -17,44 +21,34 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
     var month = parseInt(req.params.month);
     var day = parseInt(req.params.day);
     var year = parseInt(req.params.year);
-    if (isNaN(month) || isNaN(day) || isNaN(year)) {
-        console.error("moonth is not a number");
-        res.send(404, wrongDate);
-    }
-    var response = [];
-    var defaultTaskErrorMessage = defaultTask;
 
-    newSchedTask.find(function(err, tasks) {
+    //checks if format of request is correct;
+    if (isNaN(month) || isNaN(day) || isNaN(year)) {
+        console.error("not a number, please put correct date");
+        res.send(404, wrongDateFormat);
+    };
+    //check if dates interval is correct;
+    if ((month < 1) || (month > 12) || (day < 1) || (day > 31) || (year > 9999) || (year < 1)) {
+        console.error("date does not exist, please put correct date");
+        res.send(404, wrongDate);
+    };
+    //respond: list of tasks for a day;        
+    newSchedTask.find({'month': month, 'day': day, 'year': year}, function(err, response) {
         //if error
         if (err) {
             console.error(err);
         }
-        //if no tasks
-        if (!tasks) {
-            console.error("Data base is empty. There is no tasks for the moment");
-            res.send('no records');
+        if (response.length > 0) {
+            res.send(response);
+            console.log(response);
+        } else {
+            //response if task for a day does not exist yet;
+            res.send(defaultTaskErrorMessage);
+            console.log(defaultTaskErrorMessage);
         }
-
-        //respond if there are tasks 
-        if (tasks.length > 0) {
-            for (var i = 0; i < tasks.length; i++) {
-                if ((tasks[i].month === month) && (tasks[i].day === day) && (tasks[i].year)) {
-                    response.push(tasks[i]);
-                }
-            }
-            if (response.length > 0) {
-                console.log(response);
-                res.send(response);
-            } else {
-                //probably better create separate field in UI for such error messages
-                console.log('there is no task for the date');
-                res.send(defaultTaskErrorMessage);                
-            }
-        } 
-
     });
 });
-//get respond all records
+//get respond all records (we do not use the option)
 app.get('/rest/todo', function(req, res, next) {
     newSchedTask.find(function(err, tasks) {
         if (err) { console.error(err); }
@@ -64,11 +58,9 @@ app.get('/rest/todo', function(req, res, next) {
 });
 //adding a new task
 app.post('/rest/todo', function(req, res, next) {
-    var newTask = req.body;
-    
+    var newTask = req.body;    
     newSchedTask.find(function(err, tasks) {
-        if (err) { console.error(err); }
-    
+        if (err) { console.error(err); }    
         //newTaskUser to save to db mops_db:
         var newUserTask = new newSchedTask({
             "username": newTask.username,
@@ -118,16 +110,11 @@ app.delete('/rest/todo/:id', function(req, res, next) {
     //poll all data to find the 'id'
     newSchedTask.find(function(err, tasks) {
         if (err) { console.error(err); }
-        for (var i = 0; i < tasks.length; i++) {
-            if (tasks[i]._id == deleteTaskId) {
-                newSchedTask.remove({"_id": deleteTaskId}, function(err, taskToDelete) {
-                    if (err) { console.error(err); }
-                    console.log("Task with ID = " + deleteTaskId + " is deleted");
-                    res.send({"_id" : deleteTaskId});
-                }, 1);                
-                break;
-            }
-        }
+        newSchedTask.remove({'_id': deleteTaskId}, function(err, deleteTask) {
+            if (err) { console.error(err); }
+            console.log("Task with ID = " + deleteTaskId + " is deleted: " + deleteTask);
+            res.send({"_id" : deleteTaskId});            
+        });
     });
 });
 

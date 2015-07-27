@@ -1,7 +1,7 @@
 'use strict'
 
 var wrongDate = [{
-    "username": 'Not a number',
+    "username": 'date does not exist',
     "task": 'put the right date',
     "existName": false        
     }];
