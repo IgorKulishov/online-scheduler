@@ -29,7 +29,7 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
         res.send(404, {'message': errorMessage.wrongDateRange});
     };
     //respond: list of tasks for a day;        
-    newSchedTask.find({'month': month, 'day': day, 'year': year}).sort('username').exec(function(err, response) {
+    newSchedTask.find({'month': month, 'day': day, 'year': year}).sort('username').sort('start').exec(function(err, response) {
         //if error
         if (err) {
             console.error(err);
@@ -56,7 +56,7 @@ app.get('/rest/todo', function(req, res, next) {
 app.post('/rest/todo', function(req, res, next) {
     var newTask = req.body;    
     newSchedTask.find(function(err, tasks) {
-        if (err) { console.error(err); }    
+        if (err) { console.error(err); }
         //newTaskUser to save to db mops_db:
         var newUserTask = new newSchedTask({
             "username": newTask.username,
