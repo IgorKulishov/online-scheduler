@@ -29,7 +29,7 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
         res.send(404, {'message': errorMessage.wrongDateRange});
     };
     //respond: list of tasks for a day;        
-    newSchedTask.find({'month': month, 'day': day, 'year': year}, function(err, response) {
+    newSchedTask.find({'month': month, 'day': day, 'year': year}).sort('username').exec(function(err, response) {
         //if error
         if (err) {
             console.error(err);
@@ -46,7 +46,7 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
 });
 //get respond all records (we do not use the option)
 app.get('/rest/todo', function(req, res, next) {
-    newSchedTask.find(function(err, tasks) {
+    newSchedTask.find().sort('username').exec(function(err, tasks) {
         if (err) { console.error(err); }
         console.log(tasks);
         res.send(tasks);
