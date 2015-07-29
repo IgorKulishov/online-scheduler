@@ -9,8 +9,13 @@ describe('Schedule API', function() {
     element(by.model('datepicker.day')).sendKeys('1');
     element(by.model('datepicker.year')).sendKeys('2015');
     element(by.css('.btn-date')).click();
+
     element.all(by.css('.userNameList')).first().getText().then(function (text) {
-        expect(text).to.contain('A');
+        expect(text).to.contain('A');        
     });
+
+    afterEach(function() {
+      db.connection.db.dropDatabase();
+    })
   });
 });
