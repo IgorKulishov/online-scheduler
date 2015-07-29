@@ -12,8 +12,10 @@ angular.module('scheduleOfTeam')
             jsonService.readList(month, day, year).then(function(response) {
                 // Array of tasks to show in UI;
                 self.taskListArray = response.data;
+            //<---LOOP TO SHOW USERNAME ONLY ONCE--->
+                //create Array which will contain only unique names
                 var existNameArray = [];
-                //existNameArray[0] = self.taskListArray[0];
+                //add first element from server data to empty array
                 existNameArray[0] = self.taskListArray[0];
                 for (var i = 0; i < self.taskListArray.length; i++) {                    
                     //need to make separate function for the second loop
@@ -36,6 +38,7 @@ angular.module('scheduleOfTeam')
                         }
                     }
                 }
+            //<---LOOP TO SHOW USERNAME ONLY ONCE--->
                 //the loop will show same username only once setting 'existName' = true;
         /*        if (self.taskListArray[0])
                     self.taskListArray[0].existName = false;
