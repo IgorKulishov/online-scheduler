@@ -5,20 +5,44 @@ angular.module('scheduleOfTeam')
         var enteredMonth;
         var enteredDay;
         var enteredYear;
-        var existNameArray = [];
         
-        //function to read 'list' array of tasks from file in data folder           
+        
+        //function to read 'list' array of tasks from file in data folder
         var taskListArrayRead = function(month, day,  year) {
             jsonService.readList(month, day, year).then(function(response) {
                 // Array of tasks to show in UI;
                 self.taskListArray = response.data;
+                var existNameArray = [];
+                //existNameArray[0] = self.taskListArray[0];
+                existNameArray[0] = self.taskListArray[0];
+                for (var i = 0; i < self.taskListArray.length; i++) {                    
+                    //need to make separate function for the second loop
+                    var n = existNameArray.length;
+                    for (var j = 0; j < n; j++) {
+                        if (i === 0) {
+                            self.taskListArray[i].existName = false;
+                            break;                            
+                        }
+
+                        if ((existNameArray[j].username === self.taskListArray[i].username) && (i != 0)) {
+                            self.taskListArray[i].existName = true;
+                            break;
+                        }
+                        if ((existNameArray[j].username != self.taskListArray[i].username) && (j === n - 1)) {
+                            self.taskListArray[i].existName = false;
+                            existNameArray.push(self.taskListArray[i]);
+                            break;
+                            //return existNameArray;
+                        }
+                    }
+                }
                 //the loop will show same username only once setting 'existName' = true;
-                if (self.taskListArray[0])
+        /*        if (self.taskListArray[0])
                     self.taskListArray[0].existName = false;
                 if (self.taskListArray.length > 0) {
                     for (var i = 1; i < self.taskListArray.length; i++)
                         self.taskListArray[i].existName = true;
-                }
+                }*/
                 // if there is no tasks -> show message in UI;
                 if (!self.taskListArray._id) 
                     self.message = response.data.message;
@@ -27,7 +51,7 @@ angular.module('scheduleOfTeam')
                         alert(' Error while fetching notes ' + errResponse[key]);
                 }
             );
-        };        
+        };
         
         this.chooseDate = function(date) {
             taskListArrayRead(date.month, date.day, date.year);   
