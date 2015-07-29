@@ -1,16 +1,16 @@
 'use strict';
 
-describe('Main View', function() {
+describe('Schedule API', function() {
   var page;
 
-  beforeEach(function() {
-    browser.get('/');
-    page = require('./main.po');
-  });
-
-  it('should include jumbotron with correct data', function() {
-    expect(page.h1El.getText()).toBe('\'Allo, \'Allo!');
-    expect(page.imgEl.getAttribute('src')).toMatch(/assets\/images\/yeoman.png$/);
-    expect(page.imgEl.getAttribute('alt')).toBe('I\'m Yeoman');
+  it('list a schedule', function() {
+    browser.get('http://localhost:3001/#/Schedule');
+    element(by.model('datepicker.month')).sendKeys('1');
+    element(by.model('datepicker.day')).sendKeys('1');
+    element(by.model('datepicker.year')).sendKeys('2015');
+    element(by.css('.btn-date')).click();
+    element.all(by.css('.userNameList')).first().getText().then(function (text) {
+        expect(text).to.contain('A');
+    });
   });
 });
