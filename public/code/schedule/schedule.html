@@ -58,7 +58,7 @@
 			                <option value="2017">2017</option>
 				        </select>
 
-				        <input type = "button" class="btn-date" value ="open" ng-click="ctrl.chooseDate(datepicker)">
+				        <input type = "button" class="btn-open" class="btn-date" value ="open" ng-click="ctrl.chooseDate(datepicker)">
 		   				               
 		   		</div>
 	        </nav>
@@ -86,7 +86,7 @@
 	            <div class="col-md-1 col2">
 	            <!--list of Tasks from taskListArray in JSON-->
 		            <div ng-if="!taskRecord.isEditing && !taskRecord.existName" class="btn-group" dropdown dropdown-append-to-body>
-			            <button type="button" class="btn btn-name dropdown-toggle" dropdown-toggle>
+			            <button type="button" class="btn" dropdown-toggle>
 			                {{taskRecord.username}}
 			            <span class="caret"></span>
 			            </button>

@@ -10,7 +10,7 @@ exports.config = {
 
   // A base URL for your application under test. Calls to protractor.get()
   // with relative paths will be prepended with this.
-  baseUrl: 'http://localhost:' + (process.env.PORT || '9000'),
+  baseUrl: 'http://localhost:' + (process.env.PORT || 3000),
 
   // If true, only chromedriver will be started, not a standalone selenium.
   // Tests for browsers other than chrome will not run.
@@ -48,7 +48,7 @@ exports.config = {
     defaultTimeoutInterval: 30000
   },
   onPrepare: function() {
-      process.env.PORT = 3001;
+      process.env.PORT = 3000;
       require('./server');
   }
 };
