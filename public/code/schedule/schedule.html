@@ -1,4 +1,23 @@
-<div>
+
+<div ng-if="token == '0'">
+  <ol>
+      <a class="btn-date" href="#/">Login</a>
+      <a class="btn-date" href="#/Users">Register</a>
+  </ol>
+  <h1>Thank you!</h1>
+  <img src="code/img/bye.jpg">
+  <h5>Please click 'Login' to login the system.</h5>
+</div>
+
+
+<div ng-if="token && token != '0'">
+	  <div>
+	      <ol>
+	          <a class="btn-date" href="#/Users">Users</a>
+	          <a class="btn-date-logout" ng-click="ctrl.logout()">Logout</a>
+	      </ol>
+	  </div>
+
 		    <nav class="navbar navbar-default">	
 		        <div class="container-fluid">
 	                <h3>Schedule</h3>
@@ -86,6 +105,8 @@
 	            <div class="col-md-1 col2">
 	            <!--list of Tasks from taskListArray in JSON-->
 		            <div ng-if="!taskRecord.isEditing && !taskRecord.existName" class="btn-group" dropdown dropdown-append-to-body>
+		            <!--			            <button type="button" class="btn btn-name dropdown-toggle" dropdown-toggle> -->
+
 			            <button type="button" class="btn" dropdown-toggle>
 			                {{taskRecord.username}}
 			            <span class="caret"></span>
@@ -170,11 +191,11 @@
 	                    <div class="row">
 	                        <div class="col-md-2 col1">
 	                            <h4>Username</h4>
-	                            <input ng-model="ctrl.newTask.username"placeholder="username" style="width:161px">
+	                            <input ng-model="ctrl.newTask.username" placeholder="username" style="width:161px">
 	                        </div>
 	                        <div class="col-md-1 col2">
 	                            <h4>Start</h4>
-	                            <input ng-model="ctrl.newTask.start"placeholder="Start time" style="width:80px">
+	                            <input ng-model="ctrl.newTask.start" placeholder="Start time" style="width:80px">
 	                        </div>
 	                        <div class="col-md-1 col3">
 	                            <h4>Finish</h4>

@@ -2865,6 +2865,12 @@ fieldset[disabled] .btn-default.active {
   border-color: #66ccff;
   border-radius: 25px;
 }
+.btn-date-logout {
+  color: #fff;
+  background-color: #ff6600;
+  border-color: #66ccff;
+  border-radius: 25px;
+}
 .ins-date {
   border-radius: 3px;
   border-color: #ccffff;

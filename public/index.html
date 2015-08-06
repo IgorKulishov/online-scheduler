@@ -10,16 +10,17 @@
 	    <script src="vendor/angular.js"></script>
 	    <script src="vendor/angular-route.js"></script>
 	    <script src="code/main.js"></script>
+        <script src="code/login/loginController.js"></script>	  
 	    <script src="code/schedule/scheduleController.js"></script>
+	    <script src="code/users/newUserController.js"></script>
+	  
+
 	    <title>Schedule</title>
     </head>
 
     <body ng-app="scheduleOfTeam">
-	    <ol>
-	        <a class="btn-date" href="#/">Sign-in</a>
-	        <a class="btn-date" href="#/Users">Users</a>
-	        <a class="btn-date" href="#/Schedule">Schedule</a>
-	    </ol>
+    <p style="display: none">token: {{token}}</p>
+
         <div ng-view></div>
     </body>
 </html>

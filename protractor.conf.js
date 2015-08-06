@@ -48,7 +48,7 @@ exports.config = {
     defaultTimeoutInterval: 30000
   },
   onPrepare: function() {
-      process.env.PORT = 3000;
+      process.env.PORT = 3001;
       require('./server');
   }
 };

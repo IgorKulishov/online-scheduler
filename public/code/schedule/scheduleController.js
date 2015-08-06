@@ -1,15 +1,15 @@
 angular.module('scheduleOfTeam')
-    .controller("scheduleController", function(jsonService, $http) {
+    .controller("scheduleController", function(jsonService, $http, $rootScope) {
         var self = this;
         //used for add a task function;
         var enteredMonth;
         var enteredDay;
         var enteredYear;
-        
-        
+        //not save option to use $rootScope to pass token (need to find better way)
+        var token = $rootScope.token;
         //function to read 'list' array of tasks from file in data folder
         var taskListArrayRead = function(month, day,  year) {
-            jsonService.readList(month, day, year).then(function(response) {
+            jsonService.readList(month, day, year, token).then(function(response) {
                 // Array of tasks to show in UI;
                 self.taskListArray = response.data;
             //<---LOOP TO SHOW USERNAME ONLY ONCE--->
@@ -17,7 +17,7 @@ angular.module('scheduleOfTeam')
                 var existNameArray = [];
                 //add first element from server data to empty array
                 existNameArray[0] = self.taskListArray[0];
-                for (var i = 0; i < self.taskListArray.length; i++) {                    
+                for (var i = 0; i < self.taskListArray.length; i++) {
                     //need to make separate function for the second loop
                     var n = existNameArray.length;
                     for (var j = 0; j < n; j++) {
@@ -25,7 +25,6 @@ angular.module('scheduleOfTeam')
                             self.taskListArray[i].existName = false;
                             break;                            
                         }
-
                         if ((existNameArray[j].username === self.taskListArray[i].username) && (i != 0)) {
                             self.taskListArray[i].existName = true;
                             break;
@@ -34,19 +33,9 @@ angular.module('scheduleOfTeam')
                             self.taskListArray[i].existName = false;
                             existNameArray.push(self.taskListArray[i]);
                             break;
-                            //return existNameArray;
                         }
                     }
                 }
-            //<---LOOP TO SHOW USERNAME ONLY ONCE--->
-                //the loop will show same username only once setting 'existName' = true;
-        /*        if (self.taskListArray[0])
-                    self.taskListArray[0].existName = false;
-                if (self.taskListArray.length > 0) {
-                    for (var i = 1; i < self.taskListArray.length; i++)
-                        self.taskListArray[i].existName = true;
-                }*/
-                // if there is no tasks -> show message in UI;
                 if (!self.taskListArray._id) 
                     self.message = response.data.message;
             }, function(errResponse) {
@@ -57,12 +46,11 @@ angular.module('scheduleOfTeam')
         };
         
         this.chooseDate = function(date) {
-            taskListArrayRead(date.month, date.day, date.year);   
+            taskListArrayRead(date.month, date.day, date.year);
             enteredMonth = date.month;
             enteredDay = date.day;
             enteredYear = date.year;
         };
-
         // function to fill in initial information into the "add new task" form from 'txt' file
         var init = function() {
             self.newTask = {};
@@ -135,12 +123,26 @@ angular.module('scheduleOfTeam')
                 }
             );
         };
+        this.logout = function() {
+            jsonService.logout(token).then(
+                function(response) {
+                    $rootScope.token = 0;
+                    init();
+                },
+                function(err) {
+                    alert(err);
+                }
+            );
+        };
     })
     .factory("jsonService", ['$http', '$q', function($http, $q) {
-        return {readList: function(month, day, year) {
+        return {readList: function(month, day, year, token) {
             var res = {
                     method: 'GET',                    
-                    url: 'http://localhost:3000/rest/todo/' + month + '/' + day + '/' + year
+                    url: ('/rest/todo/' + month + '/' + day + '/' + year),
+                    headers: {
+                        'x-auth' : token
+                    }
                 };                           
             return $http(res);              
             }, addNewTask: function(newTask) {
@@ -172,6 +174,16 @@ angular.module('scheduleOfTeam')
                         reject($http(req))
                     }
                 });
+            }, logout: function(token) {
+                var req = {
+                    method: 'PUT',
+                    url: '/rest/logout',                    
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-auth' : token
+                    }
+                };
+                return $http(req);
             }
         };         
     }]);
