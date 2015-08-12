@@ -1,21 +1,16 @@
 'use strict';
 
-describe('Schedule API', function() {
+describe('Main View', function() {
   var page;
 
-  it('list a schedule', function() {
-    browser.get('http://localhost:3000/#/Schedule');
-    element(by.model('datepicker.month')).sendKeys('1');
-    element(by.model('datepicker.day')).sendKeys('1');
-    element(by.model('datepicker.year')).sendKeys('2015');
-    element(by.css('.btn-open')).click();
+  beforeEach(function() {
+    browser.get('/');
+    page = require('./main.po');
+  });
 
-    element.all(by.css('.btn')).first().getText().then(function (text) {
-        expect(text).toEqual('A');
-    });
-
-    afterEach(function() {
-      db.connection.db.dropDatabase();
-    })
+  it('should include jumbotron with correct data', function() {
+    expect(page.h1El.getText()).toBe('\'Allo, \'Allo!');
+    expect(page.imgEl.getAttribute('src')).toMatch(/assets\/images\/yeoman.png$/);
+    expect(page.imgEl.getAttribute('alt')).toBe('I\'m Yeoman');
   });
 });

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var express = require('express');
 var app = express();
@@ -11,19 +11,17 @@ var newSchedTask = require('./server/components/newUserTask');
 var newUserInfo = require('./server/components/newUserInfo');
 //response for all errors including empty tasks, wrong dates, wrong formats
 var errorMessage = require('./server/components/errorMessages');
-//jwt key:
+//jwt secret key:
 var jwtKey = 'online-scheduler';
-//array of active tokens:
+//array of active session tokens:
 var tokenArray = [];
 
 app.use(bodyParser.json());
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public'));
 
-//LOGIN & REGISTER NEW USER SERVER PART BEGINNING
-//---------------------------------------
+//LOGIN & REGISTER NEW USER SERVER BLOCK:
 
-//add a new user
 app.post('/rest/reg', function(req, res) {
     var newUserData = req.body;
     console.log(req.body.first_name);
@@ -32,7 +30,8 @@ app.post('/rest/reg', function(req, res) {
         "first_name": newUserData.first_name,
         "last_name": newUserData.last_name,
         "username": newUserData.username,
-        "password": newUserData.password, //hidden and not sendable to client
+        //later need to prevent password from sending back to API
+        "password": newUserData.password, 
         "phone": newUserData.phone,
         "e_mail": newUserData.e_mail,
         "position": newUserData.position,
@@ -61,7 +60,8 @@ app.post('/rest/reg', function(req, res) {
         res.send(newUserRecord);
     });
 });
-
+//get all list of users
+// (NOT FINISHED: NEED TO ADD session token in headers on server and client sides)
 app.get('/rest/users', function(req, res) {
     newUserInfo.find().sort('first_name').sort('last_name').exec(function(err, data) {
         if (err)
@@ -70,28 +70,28 @@ app.get('/rest/users', function(req, res) {
         res.send(data);
     });
 });
-
-
+//delete a user from a DB
+// (NOT FINISHED: NEED TO ADD session token in headers on server and client sides)
 app.delete('/rest/users/:id', function(req, res, next) {
-    var deleteTaskId = req.params.id;
+    var deleteUserId = req.params.id;
     //poll all data to find the 'id'
     //need to add functionality: 'find the _id first'
     newUserInfo.find(function(err, tasks) {
         if (err) { console.error(err); }
-        newUserInfo.remove({'_id': deleteTaskId}, function(err, deleteTask) {
+        newUserInfo.remove({'_id': deleteUserId}, function(err, deleteUser) {
             if (err) { console.error(err); }
-            console.log("Task with ID = " + deleteTaskId + " is deleted: " + deleteTask);
-            res.send({"_id" : deleteTaskId});
+            console.log("Task with ID = " + deleteUserId + " is deleted: " + deleteUser);
+            res.send({"_id" : deleteUserId});
         });
     });
 });
-//login into the application
+//-----------END OF 'LOGIN & REGISTER NEW USER' BLOCK--------
+
+//LOGIN AND SEND BACK SESSION TOKEN :
 app.post('/rest/auth', function(req, res, next) {
     var loginUser = req.body;
     var userName = loginUser.username;
     var passWord = loginUser.password;
-
-    console.log(userName + ' : ' + passWord);
     newUserInfo.find({'username': userName, 'password': passWord}).exec(function(err, existUsers) {
         if (err) { console.error(err); }
         if (existUsers.length > 0) {
@@ -118,15 +118,9 @@ app.put('/rest/logout', function(req, res, next) {
         }
     } 
 });
+//-----------END OF SESSION TOKEN BLOCK-------------------
 
-//---------------------------------------
-//LOGIN & REGISTER NEW USER SERVER PART END
-
-
-
-//------------------------------
-// SCHEDULE SERVER PART BEGINNING
-
+// SCHEDULE BLOCK:
 //get respond sends list of all tasks from mongo_db to a client
 app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
     for (var i = 0; i < tokenArray.length; i++) {
@@ -165,6 +159,7 @@ app.get('/rest/todo/:month/:day/:year', function(req, res, next) {
     }
 });
 //get respond all records (we do not use the option)
+// (!) need to add check of headers on server and client sides: req.headers['x-auth'];
 app.get('/rest/todo', function(req, res, next) {
     newSchedTask.find().sort('username').exec(function(err, tasks) {
         if (err) { console.error(err); }
@@ -173,6 +168,7 @@ app.get('/rest/todo', function(req, res, next) {
     });
 });
 //adding a new task
+// (NOT FINISHED: NEED TO ADD session token in headers on server and client sides)
 app.post('/rest/todo', function(req, res, next) {
     var newTask = req.body;    
     newSchedTask.find(function(err, tasks) {
@@ -197,6 +193,7 @@ app.post('/rest/todo', function(req, res, next) {
 });
 //editing existing task
 //':id' is equivalent of ':_id'
+// (NOT FINISHED: NEED TO ADD session token in headers on server and client sides)
 app.put('/rest/todo/:id', function(req, res, next) {
     var updateTask = req.body;
     console.log(updateTask);
@@ -218,7 +215,8 @@ app.put('/rest/todo/:id', function(req, res, next) {
         }
     });
 }); 
-//delete an item from array
+//delete a task from DB
+// (NOT FINISHED: NEED TO ADD session token in headers on server and client sides)
 app.delete('/rest/todo/:id', function(req, res, next) {
     var deleteTaskId = req.params.id;
     //poll all data to find the 'id'
@@ -231,10 +229,7 @@ app.delete('/rest/todo/:id', function(req, res, next) {
         });
     });
 });
-
-
-//SCHEDULE PART SERVER END
-//--------------------------------------------------
+//---------------END OF SCHEDULE BLOCK-------------
 
 //if not found
 app.use(function(req, res) {

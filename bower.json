@@ -1,6 +1,6 @@
 {
-  "name": "online-scheduler",
-  "version": "0.0.7",
+  "name": "scheduler",
+  "version": "0.0.0",
   "dependencies": {
     "angular": ">=1.2.*",
     "json3": "~3.3.1",

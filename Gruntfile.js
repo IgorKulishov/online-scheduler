@@ -1,4 +1,4 @@
-// Generated on 2015-07-13 using generator-angular-fullstack 2.0.13
+// Generated on 2015-08-12 using generator-angular-fullstack 2.0.13
 'use strict';
 
 module.exports = function (grunt) {
@@ -35,11 +35,11 @@ module.exports = function (grunt) {
     },
     express: {
       options: {
-        port: process.env.PORT || 3000
+        port: process.env.PORT || 9000
       },
       dev: {
         options: {
-          script: 'server.js',
+          script: 'server/app.js',
           debug: true
         }
       },
@@ -98,7 +98,7 @@ module.exports = function (grunt) {
       },
       express: {
         files: [
-          '*.{js,json}'
+          'server/**/*.{js,json}'
         ],
         tasks: ['express:dev', 'wait'],
         options: {
@@ -190,7 +190,7 @@ module.exports = function (grunt) {
         options: {
           nodeArgs: ['--debug-brk'],
           env: {
-            PORT: process.env.PORT || 3000
+            PORT: process.env.PORT || 9000
           },
           callback: function (nodemon) {
             nodemon.on('log', function (event) {

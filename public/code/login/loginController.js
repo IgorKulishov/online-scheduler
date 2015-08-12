@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('scheduleOfTeam')
     .controller("loginController", function(loginService, $http, $rootScope) {
         var self = this;

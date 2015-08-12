@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('scheduleOfTeam')
     .controller("scheduleController", function(jsonService, $http, $rootScope) {
         var self = this;
