@@ -1,19 +1,24 @@
 'use strict';
 
-angular.module('schedulerApp')
+angular.module('scheduleOfTeam', ['ngRoute'])
   .config(function ($routeProvider) {
-    $routeProvider
-      .when('/login', {
+    $routeProvider.when('/', {
+  //    	template: '<h1>Sign in page</h1>'
         templateUrl: 'app/account/login/login.html',
-        controller: 'LoginCtrl'
+        controller: 'loginController',
+        controllerAs: 'logContr'
       })
-      .when('/signup', {
-        templateUrl: 'app/account/signup/signup.html',
-        controller: 'SignupCtrl'
+      .when('/Schedule', {
+//      	  template: '<h1>Schedule page</h1>'
+        templateUrl: 'code/schedule/schedule.html',
+        controller: 'scheduleController',
+        controllerAs: 'ctrl'
       })
-      .when('/settings', {
-        templateUrl: 'app/account/settings/settings.html',
-        controller: 'SettingsCtrl',
-        authenticate: true
-      });
+      .when('/Users', {
+  //  	  template: '<h1>Users page</h1>'
+          templateUrl: 'code/users/users.html',
+          controller: 'newUserController',
+          controllerAs: 'userCtrl'
+      })
+      .otherwise({redirectTo: '/'});
   });
