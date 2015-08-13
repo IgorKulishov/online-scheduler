@@ -4,8 +4,7 @@ angular.module('schedulerApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute',
-  'ui.bootstrap'
+  'ngRoute'
 ])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider
