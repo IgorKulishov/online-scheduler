@@ -1,0 +1,219 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+
+<div ng-if="token == '0'">
+  <ol>
+      <a class="btn-date" href="#/">Login</a>
+      <a class="btn-date" href="#/Users">Register</a>
+  </ol>
+  <h1>Thank you!</h1>
+  <img src="code/img/bye.jpg">
+  <h5>Please click 'Login' to login the system.</h5>
+</div>
+
+
+<!--<div ng-if="token && token != '0'">-->
+
+<div>
+	  <div>
+	      <ol>
+	          <a class="btn-date" href="#/Users">Users</a>
+	          <a class="btn-date-logout" ng-click="ctrl.logout()">Logout</a>
+	      </ol>
+	  </div>
+
+		    <nav class="navbar navbar-default">	
+		        <div class="container-fluid">
+	                <h3>Schedule</h3>
+	                <div ng-init="type" class="ins-date-form">
+			            <select ng-model="datepicker.month" class="ins-date">
+			                <option value="1">1</option>
+			                <option value="2">2</option>
+			                <option value="3">3</option>
+			                <option value="4">4</option>
+			                <option value="5">5</option>
+			                <option value="6">6</option>
+			                <option value="7">7</option>
+			                <option value="8">8</option>
+			                <option value="9">9</option>
+			                <option value="10">10</option>
+			                <option value="11">11</option>
+			                <option value="12">12</option>
+				        </select>
+	                
+			            <select ng-model="datepicker.day" class="ins-date">
+			                <option value="1">1</option>
+			                <option value="2">2</option>
+			                <option value="3">3</option>
+			                <option value="4">4</option>
+			                <option value="5">5</option>
+			                <option value="6">6</option>
+			                <option value="7">7</option>
+			                <option value="8">8</option>
+			                <option value="9">9</option>
+			                <option value="10">10</option>
+			                <option value="11">11</option>
+			                <option value="12">12</option>
+			                <option value="13">13</option>
+			                <option value="14">14</option>
+			                <option value="15">15</option>
+			                <option value="16">16</option>
+			                <option value="17">17</option>
+			                <option value="18">18</option>
+			                <option value="19">19</option>
+			                <option value="20">20</option>
+			                <option value="21">21</option>
+			                <option value="22">22</option>
+			                <option value="23">23</option>
+			                <option value="24">24</option>
+			                <option value="25">25</option>
+			                <option value="26">26</option>
+			                <option value="27">27</option>
+			                <option value="28">28</option>
+			                <option value="29">29</option>
+			                <option value="30">30</option>
+			                <option value="31">31</option>            
+				        </select>				        
+
+			            <select ng-model="datepicker.year" class="ins-date">
+			                <option value="2015">2015</option>
+			                <option value="2016">2016</option>
+			                <option value="2017">2017</option>
+				        </select>
+
+				        <input type = "button" class="btn-open" class="btn-date" value ="open" ng-click="ctrl.chooseDate(datepicker)">
+		   				               
+		   		</div>
+	        </nav>
+	        <div class="row">
+	            
+	            <div class="col-md-1 col2">
+	                <h4>Username</h4>
+	            </div>                
+	            
+	            <div class="col-md-1 col3">
+	                <h4>Start</h4>
+	            </div>
+
+	            <div class="col-md-1 col7">
+	                <h4>Finish</h4>
+	            </div>
+
+	            <div class="col-md-1 col4">
+	                <h4>Task</h4>
+	            </div>
+
+	        </div>
+	        <div class="row" ng-repeat="taskRecord in ctrl.taskListArray | orderBy:'username'">
+	            
+	            <div class="col-md-1 col2">
+	            <!--list of Tasks from taskListArray in JSON-->
+		            <div ng-if="!taskRecord.isEditing && !taskRecord.existName" class="btn-group" dropdown dropdown-append-to-body>
+		            <!--			            <button type="button" class="btn btn-name dropdown-toggle" dropdown-toggle> -->
+
+			            <button type="button" class="btn" dropdown-toggle>
+			                {{taskRecord.username}}
+			            <span class="caret"></span>
+			            </button>
+			            <div>
+			                <select class="dropdown-menu" role="menu">
+				                <option><a value="delete">Delete</a></option>
+					            <option><a value="edit">Edit</a></option>
+					        </select>
+					    </div>	
+		            </div>
+
+		            <div ng-if="taskRecord.isEditing">
+		                <input ng-model="taskRecord.username"/>
+		            </div>
+	            </div>   
+
+	            <div class="col-md-1 col3">
+	            <!--list of Tasks from taskListArray in JSON-->
+	            
+		            <div ng-if="!taskRecord.isEditing">
+		                <h5>{{taskRecord.start}}</h5>
+		            </div>
+
+		            <div ng-if="taskRecord.isEditing">
+		                <input ng-model="taskRecord.start"/>
+		            </div>
+
+	            </div>
+
+		        <div class="col-md-1 col6">
+	            <!--list of Tasks from taskListArray in JSON-->
+	            
+		            <div ng-if="!taskRecord.isEditing">
+		                <h5>{{taskRecord.finish}}</h5>
+		            </div>
+
+		            <div ng-if="taskRecord.isEditing">
+		                <input ng-model="taskRecord.finish"/>
+		            </div>
+	            </div>
+
+	            <div class="col-md-1 col7">
+	            <!--list of Tasks from taskListArray in JSON-->
+	            
+		            <div ng-if="!taskRecord.isEditing">
+		                <h5>{{taskRecord.task}}</h5>
+		            </div>
+
+		            <div ng-if="taskRecord.isEditing">
+		                <input ng-model="taskRecord.task"/>
+		            </div>
+
+	            </div>
+          
+	            <!--print out 'Type's of each Task from taskListArray from controller-->
+	            <div class="col-md-1 col4">
+                 <!--if "taskRecord.isEditing == false" just read data from Aray-->
+		            <div ng-if="!taskRecord.isEditing">
+		                <h5>{{taskRecord.type}}</h5>
+		            </div>
+	            </div>
+				<!--DELETE button-->
+				<div class="col-md-1 col6">
+				    <button type="button" class="btn btn-danger" ng-click="ctrl.delete(taskRecord._id)">Delete</button>
+				</div>				
+			    <!--Edit button-->
+				<div class="col-md-1 col7" ng-if="!taskRecord.isEditing">
+				    <button type="button" class="btn btn-primary" ng-click="ctrl.edit(taskRecord._id)">Edit</button>
+				</div>
+                <!--Save button-->
+				<div class="col-md-1 col7" ng-if="taskRecord.isEditing">
+				    <button type="button" class="btn" ng-click="ctrl.save(taskRecord._id)">Save</button>
+				</div>
+		    </div>
+		    <div class="text-warning">
+		    	<h5>{{ctrl.message}}</h5>
+		    </div>
+		    <nav class="navbar navbar-default">
+		        <div class="container-fluid">
+		            <div class="navbar-header">
+	                    <div class="row">
+	                        <div class="col-md-2 col1">
+	                            <h4>Username</h4>
+	                            <input ng-model="ctrl.newTask.username" placeholder="username" style="width:161px">
+	                        </div>
+	                        <div class="col-md-1 col2">
+	                            <h4>Start</h4>
+	                            <input ng-model="ctrl.newTask.start" placeholder="Start time" style="width:80px">
+	                        </div>
+	                        <div class="col-md-1 col3">
+	                            <h4>Finish</h4>
+	                            <input ng-model="ctrl.newTask.finish"  placeholder="Finish time" style="width:80px">
+	                        </div>
+	                        <div class="col-md-1 col3">
+	                            <h4>Task</h4>
+	                            <input ng-model="ctrl.newTask.task"placeholder="Task.." style="width:200px">
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </nav>
+	        <input type="button" ng-click="ctrl.addTask(ctrl.newTask)" value="Add" class="add-button">
+	    </div>
+</div>
