@@ -10,7 +10,7 @@ module.exports = function(app) {
 
   // Insert routes below
   app.use('/api/task', require('./api/task'));
-  app.use('/api/users', require('./api/user'));
+  app.use('/api/user', require('./api/user'));
 
   app.use('/auth', require('./auth'));
   
