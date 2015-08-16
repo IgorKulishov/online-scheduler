@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('scheduleOfTeam')
-    .controller("scheduleController", function(jsonService, $http, $rootScope) {
+    .controller('scheduleController', function(jsonService, $http, $rootScope) {
         var self = this;
         //used for add a task function;
         var enteredMonth;
@@ -27,22 +27,24 @@ angular.module('scheduleOfTeam')
                             self.taskListArray[i].existName = false;
                             break;                            
                         }
-                        if ((existNameArray[j].username === self.taskListArray[i].username) && (i != 0)) {
+                        if ((existNameArray[j].username === self.taskListArray[i].username) && (i !== 0)) {
                             self.taskListArray[i].existName = true;
                             break;
                         }
-                        if ((existNameArray[j].username != self.taskListArray[i].username) && (j === n - 1)) {
+                        if ((existNameArray[j].username !== self.taskListArray[i].username) && (j === n - 1)) {
                             self.taskListArray[i].existName = false;
                             existNameArray.push(self.taskListArray[i]);
                             break;
                         }
                     }
                 }
-                if (!self.taskListArray._id) 
+                if (!self.taskListArray._id) {
                     self.message = response.data.message;
+                }
             }, function(errResponse) {
-                    for (var key in errResponse)
-                        alert(' Error while fetching notes ' + errResponse[key]);
+                    for (var key in errResponse) {
+                        console.log(' Error while fetching notes ' + errResponse[key]);
+                    }
                 }
             );
         };
@@ -53,7 +55,7 @@ angular.module('scheduleOfTeam')
             enteredDay = date.day;
             enteredYear = date.year;
         };
-        // function to fill in initial information into the "add new task" form from 'txt' file
+        // function to fill in initial information into the 'add new task' form from 'txt' file
         var init = function() {
             self.newTask = {};
             self.newTask.isEditing = false;
@@ -64,7 +66,7 @@ angular.module('scheduleOfTeam')
                 self.newTask.priority = response.data.priority;
                 self.newTask.type = response.data.type;
             }, function(errResponse) {
-                alert('Error while fetching notes');
+                console.log('Error while fetching notes' + errResponse);
             });
         };   
         init();
@@ -79,9 +81,9 @@ angular.module('scheduleOfTeam')
                 }
             }
             jsonService.addNewTask({
-                "username" : taskToAdd.username, "start" : taskToAdd.start, 
-                "finish" : taskToAdd.finish, "task" : taskToAdd.task,
-                "day": enteredDay, "month": enteredMonth, "year": enteredYear, "existName": existName
+                'username' : taskToAdd.username, 'start' : taskToAdd.start, 
+                'finish' : taskToAdd.finish, 'task' : taskToAdd.task,
+                'day': enteredDay, 'month': enteredMonth, 'year': enteredYear, 'existName': existName
             }).then(function(response, err) {
                 taskListArrayRead(enteredMonth, enteredDay, enteredYear);
                 if (err) {
@@ -95,15 +97,17 @@ angular.module('scheduleOfTeam')
             var deleteTaskID = {'deleteID': _id};
             jsonService.deleteTask(deleteTaskID).then(function(response, err) {
                 taskListArrayRead(enteredMonth, enteredDay, enteredYear);
-                if (err)
-                    alert(err);
+                if (err) {
+                    console.log(err);
+                }
             });
         };
         //this function is to edit a Task
         this.edit = function(_id) {
             for (var i = 0; i < this.taskListArray.length; i++) {
-                if (this.taskListArray[i]._id == _id)
+                if (this.taskListArray[i]._id === _id) {
                     this.taskListArray[i].isEditing = true;
+                }
             }
         };
         //this function is to Save edited Task
@@ -111,17 +115,17 @@ angular.module('scheduleOfTeam')
             var scheduleOfTeamArray = this.taskListArray;
             var toSaveElementNumber;
             for (var i = 0; i < scheduleOfTeamArray.length; i++) {
-                if (scheduleOfTeamArray[i]._id == _id) {
+                if (scheduleOfTeamArray[i]._id === _id) {
                     toSaveElementNumber = i;                    
                 }
             }
             this.taskListArray[toSaveElementNumber].isEditing = false;
             jsonService.saveTask(scheduleOfTeamArray[toSaveElementNumber]).then(
                 function(response) {
-                    
+                    console.log(response);
                 },
                 function(err) {
-                    alert(err);
+                    console.log(err);
                 }
             );
         };
@@ -130,14 +134,15 @@ angular.module('scheduleOfTeam')
                 function(response) {
                     $rootScope.token = 0;
                     init();
+                    console.log(response);
                 },
                 function(err) {
-                    alert(err);
+                    console.log(err);
                 }
             );
         };
     })
-    .factory("jsonService", ['$http', '$q', function($http, $q) {
+    .factory('jsonService', ['$http', '$q', function($http, $q) {
         return {readList: function(month, day, year, token) {
             var res = {
                     method: 'GET',                    
@@ -173,7 +178,7 @@ angular.module('scheduleOfTeam')
                     if ($http(req)) {
                         resolve($http(req));
                     } else {
-                        reject($http(req))
+                        reject($http(req));
                     }
                 });
             }, logout: function(token) {
