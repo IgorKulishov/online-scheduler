@@ -1,6 +1,6 @@
 {
-  "name": "online-scheduler",
-  "version": "0.0.0",
+  "name": "",
+  "version": "",
   "main": "server/app.js",
   "dependencies": {
     "express": "~4.0.0",
