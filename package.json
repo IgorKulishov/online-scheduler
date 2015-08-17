@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "version": "",
+  "name": "online-scheduler",
+  "version": "0.0.0",
   "main": "server/app.js",
   "dependencies": {
     "express": "~4.0.0",
@@ -81,7 +81,6 @@
   },
   "scripts": {
     "start": "node server/app.js",
-    "postinstall": "gulp build",
     "test": "grunt test",
     "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
   },
