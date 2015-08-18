@@ -77,7 +77,8 @@
     "time-grunt": "~0.3.1"
   },
   "engines": {
-    "iojs": "2.0.0"
+    "node": "0.12.3",
+    "npm": "2.9.1"
   },
   "scripts": {    
     "start": "node server/app.js",
