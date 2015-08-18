@@ -79,8 +79,7 @@
   "engines": {
     "iojs": "2.0.0"
   },
-  "scripts": {
-    "postinstall": "gulp build",
+  "scripts": {    
     "start": "node server/app.js",
     "test": "grunt test",
     "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
