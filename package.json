@@ -80,7 +80,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "start": "node boot.js",
+    "start": "node server/app.js",
     "postinstall": "gulp build",
     "test": "grunt test",
     "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
