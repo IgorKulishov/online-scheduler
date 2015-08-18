@@ -77,7 +77,7 @@
     "time-grunt": "~0.3.1"
   },
   "engines": {
-    "iojs": "=1.0.0"
+    "iojs": "2.0.0"
   },
   "scripts": {
     "postinstall": "gulp build",
