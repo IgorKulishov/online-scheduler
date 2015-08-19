@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('scheduleOfTeam')
+angular.module('schedulerApp')
     .controller('scheduleController', function(jsonService, $http, $rootScope) {
         var self = this;
         //used for add a task function;

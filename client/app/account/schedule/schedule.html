@@ -1,27 +1,26 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div class="container">
+  <div class="row">
+  <div class="col-sm-12">
+	<div ng-if="token == '0'">
+   	    <ol>
+	        <a class="btn-date" href="#/">Login</a>
+	        <a class="btn-date" href="#/Users">Register</a>
+	    </ol>
+	    <h1>Thank you!</h1>
+	    <img src="code/img/bye.jpg">
+	    <h5>Please click 'Login' to login the system.</h5>
+	</div>
 
-<div ng-if="token == '0'">
-  <ol>
-      <a class="btn-date" href="#/">Login</a>
-      <a class="btn-date" href="#/Users">Register</a>
-  </ol>
-  <h1>Thank you!</h1>
-  <img src="code/img/bye.jpg">
-  <h5>Please click 'Login' to login the system.</h5>
-</div>
-
-
-<!--<div ng-if="token && token != '0'">-->
-
-<div>
-	  <div>
-	      <ol>
-	          <a class="btn-date" href="#/Users">Users</a>
-	          <a class="btn-date-logout" ng-click="ctrl.logout()">Logout</a>
-	      </ol>
-	  </div>
+    <!--<div ng-if="token && token != '0'">-->
+    <div>
+	    <div>
+	        <ol>
+	            <a class="btn-date" href="#/Users">Users</a>
+	            <a class="btn-date-logout" ng-click="ctrl.logout()">Logout</a>
+	        </ol>
+	    </div>
 
 		    <nav class="navbar navbar-default">	
 		        <div class="container-fluid">
@@ -216,4 +215,14 @@
 	        </nav>
 	        <input type="button" ng-click="ctrl.addTask(ctrl.newTask)" value="Add" class="add-button">
 	    </div>
+	</div>
+	</div>
 </div>
+
+<footer class="footer">
+  <div class="container">
+      <p>Angular Fullstack v2.0.13 | Online scheduler v 0.8
+        <!--<a href="https://twitter.com/tyhenkel">@tyhenkel</a> |
+         <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open">Issues</a>--></p>
+  </div>
+</footer>
