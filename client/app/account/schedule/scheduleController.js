@@ -145,32 +145,32 @@ angular.module('schedulerApp')
     .factory('jsonService', ['$http', '$q', function($http, $q) {
         return {readList: function(month, day, year, token) {
             var res = {
-                    method: 'GET',                    
-                    url: ('/rest/todo/' + month + '/' + day + '/' + year),
+                    method: 'GET',
+                    url: ('/api/schedule/' + month + '/' + day + '/' + year),
                     headers: {
                         'x-auth' : token
                     }
-                };                           
-            return $http(res);              
+                };
+            return $http(res);
             }, addNewTask: function(newTask) {
                 var req = {
                     method: 'POST',
-                    url: '/rest/todo',
+                    url: '/api/schedule',
                     data: newTask,
                     headers: {'Content-Type': 'application/json'}
                 };
-                return $http(req);                                                                                                          
+                return $http(req);
             }, deleteTask: function(deleteTaskNumber) {
                 var req = {
                     method: 'DELETE',
-                    url: '/rest/todo/' + deleteTaskNumber.deleteID,
+                    url: '/api/schedule/' + deleteTaskNumber.deleteID,
                     headers: {'Content-Type': 'application/json'}
                 };
                 return $http(req);
             }, saveTask: function(saveTask) {
                 var req = {
                     method: 'PUT',
-                    url: '/rest/todo/' + saveTask._id,
+                    url: '/api/schedule/' + saveTask._id,
                     data: saveTask,
                     headers: {'Content-Type': 'application/json'}
                 };
