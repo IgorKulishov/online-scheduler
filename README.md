@@ -1,6 +1,7 @@
 # online-scheduler
 online team scheduler 
-Full stack "online team scheduler" to create on-line schedule for teams.
+Full stack "online team scheduler" 
+Creates on-line schedule for teams.
 
 Implemented: AngularJS, Node.js, Express.js, Mongodb.
 Application is tested with simple mocha and karma test and grunt test runner.
