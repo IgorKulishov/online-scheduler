@@ -7,6 +7,7 @@ angular.module('schedulerApp')
         var enteredMonth;
         var enteredDay;
         var enteredYear;
+
         //not save option to use $rootScope to pass token (need to find better way)
         var token = $rootScope.token;
         //function to read 'list' array of tasks from file in data folder
@@ -50,10 +51,15 @@ angular.module('schedulerApp')
         };
         
         this.chooseDate = function(date) {
-            taskListArrayRead(date.month, date.day, date.year);
-            enteredMonth = date.month;
-            enteredDay = date.day;
-            enteredYear = date.year;
+
+            var day = date.split(' ')[0];
+            var month = date.split(' ')[1];
+            var year = date.split(' ')[2];
+
+            taskListArrayRead(month, day, year);
+            enteredMonth = month;
+            enteredDay = day;
+            enteredYear = year;
         };
         // function to fill in initial information into the 'add new task' form from 'txt' file
         var init = function() {
