@@ -18,17 +18,26 @@
 	    <nav class="navbar navbar-default">	
 	        <div class="container-fluid">
 
-                <h3>Schedule</h3>
-
+                <!--<h3>Schedule</h3>
                 <div ng-init="type" class="ins-date-form">
-
 	                <datepicker date-format="dd MM yyyy">
-				        <input ng-model="date" type="text"/>
-				    </datepicker>
-			        <input type = "button" class="btn-open" class="btn-date" value ="open" ng-click="ctrl.chooseDate(date)">
+				        <input ng-model="date" type="text" style="width:108px" ng-change="ctrl.chooseDate(date)"/><button><i class="glyphicon glyphicon-calendar"></i></button>
+				    </datepicker>-->
 
-	   		</div>
+    <div class="row">
+        <div class="col-md-3">
+            <p class="input-group">
+              <input type="text" class="form-control" datepicker-popup="dd MMMM yyyy" ng-model="date" is-open="status" max-date="'22 6 2020'" ng-required="true" close-text="Close" ng-change="chooseDate(date)"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+        </div>
+    </div>
+	   		    </div>
+
         </nav>
+
 	        <div class="row">
 
 	            <div class="col-md-1 col2">
@@ -143,7 +152,7 @@
 	                        </div>
 	                        <div class="col-md-1 col2">
 	                            <h4>Start</h4>
-	                            <input ng-model="ctrl.newTask.start" placeholder="Start time" style="width:80px">
+		                            <input ng-model="ctrl.newTask.start" placeholder="Start time" style="width:80px">
 	                        </div>
 	                        <div class="col-md-1 col3">
 	                            <h4>Finish</h4>

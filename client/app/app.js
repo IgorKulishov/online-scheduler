@@ -5,7 +5,8 @@ angular.module('schedulerApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  '720kb.datepicker'
+  //'720kb.datepicker',
+  'ui.bootstrap'
 ])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider

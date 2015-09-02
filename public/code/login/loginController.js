@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('scheduleOfTeam')
-    .controller("loginController", function(loginService, $http, $rootScope) {
+    .controller("loginController", function(loginService, $http, $rootScope, $scope) {
         var self = this;
         var token;
         // function to fill in initial information into login form 
@@ -10,6 +10,13 @@ angular.module('scheduleOfTeam')
             self.password = "";
         };
         init();
+
+        $scope.$on('new_post', function(_, data) {
+            $scope.$apply(function() {
+                self.message = "message : " + data;
+            });
+        });
+
         //function to receive a token
         this.loginUser = function(usernameInfo, passInfo) {
             //here can be implemented 'bcrypt'-tion to sign packages with x-auth

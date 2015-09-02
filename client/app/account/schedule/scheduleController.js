@@ -1,12 +1,27 @@
 'use strict';
 
 angular.module('schedulerApp')
-    .controller('scheduleController', function(jsonService, $http, $rootScope) {
+    .controller('scheduleController', function(jsonService, $http, $rootScope, $scope) {
         var self = this;
         //used for add a task function;
         var enteredMonth;
         var enteredDay;
         var enteredYear;
+
+        $scope.open = function() {
+            $scope.status = true;
+        };
+
+        $scope.today = function() {
+            $scope.date = new Date();
+        };
+
+        $scope.today();
+
+        $scope.clear = function () {
+            $scope.date = null;
+        };
+
 
         //not save option to use $rootScope to pass token (need to find better way)
         var token = $rootScope.token;
@@ -50,11 +65,11 @@ angular.module('schedulerApp')
             );
         };
         
-        this.chooseDate = function(date) {
+        $scope.chooseDate = function(date) {
 
-            var day = date.split(' ')[0];
-            var month = date.split(' ')[1];
-            var year = date.split(' ')[2];
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
 
             taskListArrayRead(month, day, year);
             enteredMonth = month;
