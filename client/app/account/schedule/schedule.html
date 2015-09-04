@@ -18,12 +18,6 @@
 	    <nav class="navbar navbar-default">	
 	        <div class="container-fluid">
 
-                <!--<h3>Schedule</h3>
-                <div ng-init="type" class="ins-date-form">
-	                <datepicker date-format="dd MM yyyy">
-				        <input ng-model="date" type="text" style="width:108px" ng-change="ctrl.chooseDate(date)"/><button><i class="glyphicon glyphicon-calendar"></i></button>
-				    </datepicker>-->
-
     <div class="row">
         <div class="col-md-3">
             <p class="input-group">
@@ -89,9 +83,8 @@
 		            </div>
 
 		            <div ng-if="taskRecord.isEditing">
-		                <input ng-model="taskRecord.start"/>
+		                <timepicker ng-model="taskRecord.start" ng-change="edit_start()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 		            </div>
-
 	            </div>
 
 		        <div class="col-md-1 col6">
@@ -102,7 +95,8 @@
 		            </div>
 
 		            <div ng-if="taskRecord.isEditing">
-		                <input ng-model="taskRecord.finish"/>
+   		                <timepicker ng-model="taskRecord.finish" ng-change="edit_finish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
+
 		            </div>
 	            </div>
 
@@ -146,27 +140,33 @@
 		        <div class="container-fluid">
 		            <div class="navbar-header">
 	                    <div class="row">
-	                        <div class="col-md-2 col1">
+	                        <div class="col-md-3 col1">
 	                            <h4>Username</h4>
-	                            <input ng-model="ctrl.newTask.username" placeholder="username" style="width:161px">
+   	                            <br>
+	                            <br>
+	                            <div>
+	                            <input ng-model="newTask.username" placeholder="username" style="width:161px">
+	                            </div>
 	                        </div>
-	                        <div class="col-md-1 col2">
+	                        <div class="col-md-2 col2">
 	                            <h4>Start</h4>
-		                            <input ng-model="ctrl.newTask.start" placeholder="Start time" style="width:80px">
+		                        <timepicker ng-model="newTask.start" ng-change="changed_start()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 	                        </div>
-	                        <div class="col-md-1 col3">
+	                        <div class="col-md-2 col3">
 	                            <h4>Finish</h4>
-	                            <input ng-model="ctrl.newTask.finish"  placeholder="Finish time" style="width:80px">
+	                            <timepicker ng-model="newTask.finish" ng-change="changed_finish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 	                        </div>
-	                        <div class="col-md-1 col3">
+	                        <div class="col-md-1 col4">
 	                            <h4>Task</h4>
-	                            <input ng-model="ctrl.newTask.task"placeholder="Task.." style="width:200px">
+   	                            <br>
+	                            <br>
+	                            <input ng-model="newTask.task"placeholder="Task.." style="width:200px">
 	                        </div>
 	                    </div>
 	                </div>
 	            </div>
 	        </nav>
-	        <input type="button" ng-click="ctrl.addTask(ctrl.newTask)" value="Add" class="add-button">
+	        <input type="button" ng-click="ctrl.addTask()" value="Add" class="add-button">
 	    </div>
 	</div>
 	</div>

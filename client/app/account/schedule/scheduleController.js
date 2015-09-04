@@ -8,28 +8,52 @@ angular.module('schedulerApp')
         var enteredDay;
         var enteredYear;
 
+        //DATEPICKER
         $scope.open = function() {
             $scope.status = true;
         };
 
-        $scope.today = function() {
-            $scope.date = new Date();
-        };
-
-        $scope.today();
+        var today = new Date();
 
         $scope.clear = function () {
             $scope.date = null;
         };
 
+        //TIMEPICKER
+        var newTask_start_time = today.getHours()*60;
+        var newTask_finish_time = today.getHours()*60;
+
+        $scope.changed_start = function () {
+            newTask_start_time = $scope.newTask.start.getHours()*60 + $scope.newTask.start.getMinutes();
+        };
+        $scope.changed_finish = function () {
+            newTask_finish_time = $scope.newTask.finish.getHours()*60 + $scope.newTask.finish.getMinutes();
+        };
 
         //not save option to use $rootScope to pass token (need to find better way)
         var token = $rootScope.token;
         //function to read 'list' array of tasks from file in data folder
-        var taskListArrayRead = function(month, day,  year) {
+        var taskListArrayRead = function(month, day, year) {
             jsonService.readList(month, day, year, token).then(function(response) {
                 // Array of tasks to show in UI;
-                self.taskListArray = response.data;
+                var startTime, startHours, startMinutes, 
+                    finishTime, finishHours, finishMinutes;
+
+                var receivedData = response.data;
+                if (receivedData.length != 0) {
+                    for (var i = 0; i < receivedData.length; i++) {
+                        startTime = receivedData[i].start;
+                        startHours = Math.floor(startTime/60);
+                        startMinutes = startTime - startHours*60;
+                        receivedData[i].start = startHours + ':' + startMinutes;
+
+                        finishTime = receivedData[i].finish;
+                        finishHours = Math.floor(finishTime/60);
+                        finishMinutes = finishTime - finishHours*60;
+                        receivedData[i].finish = finishHours + ':' + finishMinutes;                        
+                    }
+               }
+               self.taskListArray = receivedData;
             //<---LOOP TO SHOW USERNAME ONLY ONCE--->
                 //create Array which will contain only unique names
                 var existNameArray = [];
@@ -41,7 +65,7 @@ angular.module('schedulerApp')
                     for (var j = 0; j < n; j++) {
                         if (i === 0) {
                             self.taskListArray[i].existName = false;
-                            break;                            
+                            break;
                         }
                         if ((existNameArray[j].username === self.taskListArray[i].username) && (i !== 0)) {
                             self.taskListArray[i].existName = true;
@@ -91,19 +115,20 @@ angular.module('schedulerApp')
             });
         };   
         init();
-        //function to add new Task 
-        this.addTask = function(taskToAdd) {
+        //function to add new Task
+        this.addTask = function() {
             //here can be implemented 'bcrypt'-tion to sign packages with x-auth
             var existName = false;
-            for (var i = 0; i < self.taskListArray.length; i++) {
-                if (self.taskListArray[i].username === taskToAdd.username) {
+            for (var i = 0; i < this.taskListArray.length; i++) {
+                if (this.taskListArray[i].username === $scope.newTask.username) {
                     existName = true;
                     break;
                 }
             }
+
             jsonService.addNewTask({
-                'username' : taskToAdd.username, 'start' : taskToAdd.start, 
-                'finish' : taskToAdd.finish, 'task' : taskToAdd.task,
+                'username' : $scope.newTask.username, 'start' : newTask_start_time,
+                'finish' : newTask_finish_time, 'task' : $scope.newTask.task,
                 'day': enteredDay, 'month': enteredMonth, 'year': enteredYear, 'existName': existName
             }).then(function(response, err) {
                 taskListArrayRead(enteredMonth, enteredDay, enteredYear);
@@ -123,13 +148,25 @@ angular.module('schedulerApp')
                 }
             });
         };
+
         //this function is to edit a Task
         this.edit = function(_id) {
+            var arrayId;
             for (var i = 0; i < this.taskListArray.length; i++) {
                 if (this.taskListArray[i]._id === _id) {
                     this.taskListArray[i].isEditing = true;
+                    arrayId = i;
                 }
             }
+            //to adjust start time using 'timepicker' in edit mode
+            $scope.edit_start = function () {
+               self.taskListArray[arrayId].start.time = self.taskListArray[arrayId].start.getHours()*60 + self.taskListArray[arrayId].start.getMinutes();
+            };
+            //to adjust finish time using 'timepicker' in edit mode
+            $scope.edit_finish = function () {
+               self.taskListArray[arrayId].finish.time = self.taskListArray[arrayId].finish.getHours()*60 + self.taskListArray[arrayId].finish.getMinutes();
+            };
+
         };
         //this function is to Save edited Task
         this.save = function(_id) {
@@ -137,13 +174,16 @@ angular.module('schedulerApp')
             var toSaveElementNumber;
             for (var i = 0; i < scheduleOfTeamArray.length; i++) {
                 if (scheduleOfTeamArray[i]._id === _id) {
-                    toSaveElementNumber = i;                    
+                    toSaveElementNumber = i;
+                    this.taskListArray[toSaveElementNumber].start = this.taskListArray[toSaveElementNumber].start.time;
+                    this.taskListArray[toSaveElementNumber].finish = this.taskListArray[toSaveElementNumber].finish.time;
                 }
             }
             this.taskListArray[toSaveElementNumber].isEditing = false;
-            jsonService.saveTask(scheduleOfTeamArray[toSaveElementNumber]).then(
+            jsonService.saveTask(this.taskListArray[toSaveElementNumber]).then(
                 function(response) {
                     console.log(response);
+                    taskListArrayRead(enteredMonth, enteredDay, enteredYear);
                 },
                 function(err) {
                     console.log(err);
@@ -189,6 +229,7 @@ angular.module('schedulerApp')
                 };
                 return $http(req);
             }, saveTask: function(saveTask) {
+                console.log(saveTask.start);
                 var req = {
                     method: 'PUT',
                     url: '/api/schedule/' + saveTask._id,
