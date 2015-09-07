@@ -20,14 +20,14 @@ angular.module('schedulerApp')
         };
 
         //TIMEPICKER
-        var newTask_start_time = today.getHours()*60;
-        var newTask_finish_time = today.getHours()*60;
+        var newTaskStartTime = today.getHours()*60;
+        var newTaskFinishTime = today.getHours()*60;
 
-        $scope.changed_start = function () {
-            newTask_start_time = $scope.newTask.start.getHours()*60 + $scope.newTask.start.getMinutes();
+        $scope.changedStart = function () {
+            newTaskStartTime = $scope.newTask.start.getHours()*60 + $scope.newTask.start.getMinutes();
         };
-        $scope.changed_finish = function () {
-            newTask_finish_time = $scope.newTask.finish.getHours()*60 + $scope.newTask.finish.getMinutes();
+        $scope.changedFinish = function () {
+            newTaskFinishTime = $scope.newTask.finish.getHours()*60 + $scope.newTask.finish.getMinutes();
         };
 
         //not save option to use $rootScope to pass token (need to find better way)
@@ -40,7 +40,7 @@ angular.module('schedulerApp')
                     finishTime, finishHours, finishMinutes;
 
                 var receivedData = response.data;
-                if (receivedData.length != 0) {
+                if (receivedData.length !== 0) {
                     for (var i = 0; i < receivedData.length; i++) {
                         startTime = receivedData[i].start;
                         startHours = Math.floor(startTime/60);
@@ -52,7 +52,7 @@ angular.module('schedulerApp')
                         finishMinutes = finishTime - finishHours*60;
                         receivedData[i].finish = finishHours + ':' + finishMinutes;                        
                     }
-               }
+                }
                self.taskListArray = receivedData;
             //<---LOOP TO SHOW USERNAME ONLY ONCE--->
                 //create Array which will contain only unique names
@@ -127,8 +127,8 @@ angular.module('schedulerApp')
             }
 
             jsonService.addNewTask({
-                'username' : $scope.newTask.username, 'start' : newTask_start_time,
-                'finish' : newTask_finish_time, 'task' : $scope.newTask.task,
+                'username' : $scope.newTask.username, 'start' : newTaskStartTime,
+                'finish' : newTaskFinishTime, 'task' : $scope.newTask.task,
                 'day': enteredDay, 'month': enteredMonth, 'year': enteredYear, 'existName': existName
             }).then(function(response, err) {
                 taskListArrayRead(enteredMonth, enteredDay, enteredYear);
@@ -159,11 +159,11 @@ angular.module('schedulerApp')
                 }
             }
             //to adjust start time using 'timepicker' in edit mode
-            $scope.edit_start = function () {
+            $scope.editStart = function () {
                self.taskListArray[arrayId].start.time = self.taskListArray[arrayId].start.getHours()*60 + self.taskListArray[arrayId].start.getMinutes();
             };
             //to adjust finish time using 'timepicker' in edit mode
-            $scope.edit_finish = function () {
+            $scope.editFinish = function () {
                self.taskListArray[arrayId].finish.time = self.taskListArray[arrayId].finish.getHours()*60 + self.taskListArray[arrayId].finish.getMinutes();
             };
 

@@ -18,31 +18,31 @@
 	    <nav class="navbar navbar-default">	
 	        <div class="container-fluid">
 
-    <div class="row">
-        <div class="col-md-3">
-            <p class="input-group">
-              <input type="text" class="form-control" datepicker-popup="dd MMMM yyyy" ng-model="date" is-open="status" max-date="'22 6 2020'" ng-required="true" close-text="Close" ng-change="chooseDate(date)"/>
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-              </span>
-            </p>
-        </div>
-    </div>
-	   		    </div>
+			    <div class="row">
+			        <div class="col-md-3">
+			            <p class="input-group">
+			              <input type="text" class="form-control" datepicker-popup="dd MMMM yyyy" ng-model="date" is-open="status" max-date="'22 6 2020'" ng-required="true" close-text="Close" ng-change="chooseDate(date)"/>
+			              <span class="input-group-btn">
+			                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+			              </span>
+			            </p>
+			        </div>
+			    </div>
+	   		</div>
 
         </nav>
 
 	        <div class="row">
 
-	            <div class="col-md-1 col2">
+	        <!--    <div class="col-md-2 col2">
 	                <h4>Username</h4>
 	            </div>
 
-	            <div class="col-md-1 col3">
+	            <div class="col-md-2 col3">
 	                <h4>Start</h4>
 	            </div>
 
-	            <div class="col-md-1 col7">
+	            <div class="col-md-2 col7">
 	                <h4>Finish</h4>
 	            </div>
 
@@ -50,32 +50,35 @@
 	                <h4>Task</h4>
 	            </div>
 
-	        </div>
+	        </div>-->
+
 	        <div class="row" ng-repeat="taskRecord in ctrl.taskListArray | orderBy:'username'">
-	            
-	            <div class="col-md-1 col2">
+
+	            <div class="col-md-2 col2">
 	            <!--list of Tasks from taskListArray in JSON-->
 		            <div ng-if="!taskRecord.isEditing && !taskRecord.existName" class="btn-group" dropdown dropdown-append-to-body>
-		            <!--			            <button type="button" class="btn btn-name dropdown-toggle" dropdown-toggle> -->
 
-			            <button type="button" class="btn" dropdown-toggle>
+			            <button type="button" class="btn" dropdown-toggle style="width:174px">
 			                {{taskRecord.username}}
-			            <span class="caret"></span>
+			                <i class="glyphicon glyphicon-user" style="color:red"></i>
 			            </button>
-			            <div>
-			                <select class="dropdown-menu" role="menu">
-				                <option><a value="delete">Delete</a></option>
-					            <option><a value="edit">Edit</a></option>
-					        </select>
-					    </div>	
-		            </div>
+					    <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+				            <li role="menuitem"><a href="#">Replace</a></li>
+				            <li role="menuitem"><a href="#">Personal info</a></li>				            
+				            <li role="menuitem"><a href="#">Record issue</a></li>
+				            <li class="divider"></li>
+				            <li role="menuitem"><a href="#">Send message</a></li>
+					    </ul>		            
+                    </div>
 
 		            <div ng-if="taskRecord.isEditing">
+		            	<br>
+		            	<br>
 		                <input ng-model="taskRecord.username"/>
 		            </div>
 	            </div>   
 
-	            <div class="col-md-1 col3">
+	            <div class="col-md-2 col3">
 	            <!--list of Tasks from taskListArray in JSON-->
 	            
 		            <div ng-if="!taskRecord.isEditing">
@@ -83,11 +86,11 @@
 		            </div>
 
 		            <div ng-if="taskRecord.isEditing">
-		                <timepicker ng-model="taskRecord.start" ng-change="edit_start()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
+		                <timepicker ng-model="taskRecord.start" ng-change="editStart()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 		            </div>
 	            </div>
 
-		        <div class="col-md-1 col6">
+		        <div class="col-md-2 col6">
 	            <!--list of Tasks from taskListArray in JSON-->
 	            
 		            <div ng-if="!taskRecord.isEditing">
@@ -95,19 +98,30 @@
 		            </div>
 
 		            <div ng-if="taskRecord.isEditing">
-   		                <timepicker ng-model="taskRecord.finish" ng-change="edit_finish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
+   		                <timepicker ng-model="taskRecord.finish" ng-change="editFinish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 
 		            </div>
 	            </div>
-
-	            <div class="col-md-1 col7">
+	            <div class="col-md-2 col7">
 	            <!--list of Tasks from taskListArray in JSON-->
-	            
-		            <div ng-if="!taskRecord.isEditing">
-		                <h5>{{taskRecord.task}}</h5>
+		            <div ng-if="!taskRecord.isEditing" class="btn-group" dropdown is-open="status.isopen">
+			            <button type="button" class="btn" dropdown-toggle style="width:195px; text-align:right">
+			                {{taskRecord.task}} |
+			                <i class="glyphicon glyphicon-ok-sign" style="color:blue"></i>
+			            </button>
+					    <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+				            <li role="menuitem"><a href="#">Start task</a></li>
+				            <li role="menuitem"><a href="#">Finish task</a></li>
+				            <li role="menuitem"><a href="#">Pause task</a></li>
+   				            <li class="divider"></li>
+				            <li role="menuitem" ><a href="#" style="color:blue" ng-click="ctrl.edit(taskRecord._id)">Edit task</a></li>
+				            <li role="menuitem" ><a href="#" style="color:red" ng-click="ctrl.delete(taskRecord._id)" >Delete task</a></li>
+					    </ul>
 		            </div>
 
 		            <div ng-if="taskRecord.isEditing">
+		            	<br>
+		            	<br>
 		                <input ng-model="taskRecord.task"/>
 		            </div>
 
@@ -120,18 +134,13 @@
 		                <h5>{{taskRecord.type}}</h5>
 		            </div>
 	            </div>
-				<!--DELETE button-->
-				<div class="col-md-1 col6">
-				    <button type="button" class="btn btn-danger" ng-click="ctrl.delete(taskRecord._id)">Delete</button>
-				</div>				
-			    <!--Edit button-->
-				<div class="col-md-1 col7" ng-if="!taskRecord.isEditing">
-				    <button type="button" class="btn btn-primary" ng-click="ctrl.edit(taskRecord._id)">Edit</button>
-				</div>
                 <!--Save button-->
 				<div class="col-md-1 col7" ng-if="taskRecord.isEditing">
+					<br>
+					<br>
 				    <button type="button" class="btn" ng-click="ctrl.save(taskRecord._id)">Save</button>
 				</div>
+
 		    </div>
 		    <div class="text-warning">
 		    	<h5>{{ctrl.message}}</h5>
@@ -150,11 +159,11 @@
 	                        </div>
 	                        <div class="col-md-2 col2">
 	                            <h4>Start</h4>
-		                        <timepicker ng-model="newTask.start" ng-change="changed_start()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
+		                        <timepicker ng-model="newTask.start" ng-change="changedStart()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 	                        </div>
 	                        <div class="col-md-2 col3">
 	                            <h4>Finish</h4>
-	                            <timepicker ng-model="newTask.finish" ng-change="changed_finish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
+	                            <timepicker ng-model="newTask.finish" ng-change="changedFinish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 	                        </div>
 	                        <div class="col-md-1 col4">
 	                            <h4>Task</h4>
