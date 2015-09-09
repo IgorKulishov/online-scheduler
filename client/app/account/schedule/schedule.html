@@ -34,24 +34,6 @@
 
 	        <div class="row">
 
-	        <!--    <div class="col-md-2 col2">
-	                <h4>Username</h4>
-	            </div>
-
-	            <div class="col-md-2 col3">
-	                <h4>Start</h4>
-	            </div>
-
-	            <div class="col-md-2 col7">
-	                <h4>Finish</h4>
-	            </div>
-
-	            <div class="col-md-1 col4">
-	                <h4>Task</h4>
-	            </div>
-
-	        </div>-->
-
 	        <div class="row" ng-repeat="taskRecord in ctrl.taskListArray | orderBy:'username'">
 
 	            <div class="col-md-2 col2">
@@ -104,15 +86,46 @@
 	            </div>
 	            <div class="col-md-2 col7">
 	            <!--list of Tasks from taskListArray in JSON-->
-		            <div ng-if="!taskRecord.isEditing" class="btn-group" dropdown is-open="status.isopen">
-			            <button type="button" class="btn" dropdown-toggle style="width:195px; text-align:right">
-			                {{taskRecord.task}} |
-			                <i class="glyphicon glyphicon-ok-sign" style="color:blue"></i>
+		            <div class="raw" ng-if="!taskRecord.isEditing" class="btn-group" dropdown is-open="status.isopen">
+			            <button type="button" class="btn" dropdown-toggle style="text-align:right; width:300px">
+			                {{taskRecord.task}}
+			                <i ng-if="taskRecord.status=='started'" class="glyphicon glyphicon-play" style="color:green"></i>
+			                <i ng-if="taskRecord.status=='paused'" class="glyphicon glyphicon-pause" style="color:yellow"></i>
+			                <i ng-if="taskRecord.status=='dropped'" class="glyphicon glyphicon-thumbs-down" style="color:red"></i>
+			                <i ng-if="taskRecord.status=='finished'" class="glyphicon glyphicon-ok-sign" style="color:green"></i>
 			            </button>
+			            <table>
+			            	<tr>
+			            		<td>
+					                <i class="glyphicon glyphicon-info-sign" style="color:blue" ng-click="isCollapsed = !isCollapsed"></i>
+			            		</td>
+			            	</tr>
+			            </table>
+			            <div collapse="!isCollapsed">
+							<input class="well well-lg" style="width:300px; background-color:white" placeholder="Task description">
+							  <table>
+							    <tr>
+				            		<td>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, 'started')">Start &nbsp;</i>
+				            		</td>
+				            		<td>
+							            <i ng-click="ctrl.statusChange(taskRecord._id, 'paused')">Pause &nbsp;</i>
+				            		</td>
+				            		<td>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, 'dropped')">Drop &nbsp;</i>
+				            		</td>
+				            		<td>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, 'finished')">Finish &nbsp;</i>
+				            		</td>
+				            		</tr>
+			            		</table>			            		
+							</input>
+						</div>
 					    <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
 				            <li role="menuitem"><a href="#">Start task</a></li>
 				            <li role="menuitem"><a href="#">Finish task</a></li>
 				            <li role="menuitem"><a href="#">Pause task</a></li>
+				            <li role="menuitem"><a href="#" ng-click="isCollapsed = !isCollapsed">Details</a></li>
    				            <li class="divider"></li>
 				            <li role="menuitem" ><a href="#" style="color:blue" ng-click="ctrl.edit(taskRecord._id)">Edit task</a></li>
 				            <li role="menuitem" ><a href="#" style="color:red" ng-click="ctrl.delete(taskRecord._id)" >Delete task</a></li>
@@ -124,9 +137,8 @@
 		            	<br>
 		                <input ng-model="taskRecord.task"/>
 		            </div>
-
 	            </div>
-          
+
 	            <!--print out 'Type's of each Task from taskListArray from controller-->
 	            <div class="col-md-1 col4">
                  <!--if "taskRecord.isEditing == false" just read data from Aray-->

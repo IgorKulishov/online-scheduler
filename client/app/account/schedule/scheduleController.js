@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('schedulerApp')
-    .controller('scheduleController', function(jsonService, $http, $rootScope, $scope) {
+    .controller('scheduleController', function(jsonService, $http, $rootScope, $scope, $window) {
         var self = this;
         //used for add a task function;
         var enteredMonth;
@@ -15,9 +15,12 @@ angular.module('schedulerApp')
 
         var today = new Date();
 
-        $scope.clear = function () {
+        $scope.clear = function() {
             $scope.date = null;
         };
+
+        //COLLAPSE
+        $scope.isCollapsed = false;
 
         //TIMEPICKER
         var newTaskStartTime = today.getHours()*60;
@@ -46,6 +49,7 @@ angular.module('schedulerApp')
                         startHours = Math.floor(startTime/60);
                         startMinutes = startTime - startHours*60;
                         receivedData[i].start = startHours + ':' + startMinutes;
+                        receivedData[i].status = false;
 
                         finishTime = receivedData[i].finish;
                         finishHours = Math.floor(finishTime/60);
@@ -147,6 +151,15 @@ angular.module('schedulerApp')
                     console.log(err);
                 }
             });
+        };
+        //change status        
+        this.statusChange = function(id, flag) {
+            for (var i = 0; i < this.taskListArray.length; i++) {
+                if (this.taskListArray[i]._id === id) {
+                    this.taskListArray[i].status = flag;
+                    
+                }
+            }
         };
 
         //this function is to edit a Task
