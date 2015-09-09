@@ -1,5 +1,4 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-
 <div class="container">
   <div class="row">
   <div class="col-sm-12">
@@ -12,30 +11,24 @@
 	    <img src="code/img/bye.jpg">
 	    <h5>Please click 'Login' to login the system.</h5>
 	</div>
-
     <!--<div ng-if="token && token != '0'">-->
     <div>
 	    <nav class="navbar navbar-default">	
 	        <div class="container-fluid">
-
 			    <div class="row">
 			        <div class="col-md-3">
 			            <p class="input-group">
-			              <input type="text" class="form-control" datepicker-popup="dd MMMM yyyy" ng-model="date" is-open="status" max-date="'22 6 2020'" ng-required="true" close-text="Close" ng-change="chooseDate(date)"/>
-			              <span class="input-group-btn">
+			                <input type="text" class="form-control" datepicker-popup="dd MMMM yyyy" ng-model="date" is-open="status" max-date="'22 6 2020'" ng-required="true" close-text="Close" ng-change="chooseDate(date)"/>
+			                <span class="input-group-btn">
 			                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-			              </span>
+			                </span>
 			            </p>
 			        </div>
 			    </div>
 	   		</div>
-
         </nav>
-
 	        <div class="row">
-
 	        <div class="row" ng-repeat="taskRecord in ctrl.taskListArray | orderBy:'username'">
-
 	            <div class="col-md-2 col2">
 	            <!--list of Tasks from taskListArray in JSON-->
 		            <div ng-if="!taskRecord.isEditing && !taskRecord.existName" class="btn-group" dropdown dropdown-append-to-body>
@@ -58,47 +51,42 @@
 		            	<br>
 		                <input ng-model="taskRecord.username"/>
 		            </div>
-	            </div>   
-
+	            </div>
 	            <div class="col-md-2 col3">
-	            <!--list of Tasks from taskListArray in JSON-->
-	            
+	            <!--list of Tasks from taskListArray in JSON-->	            
 		            <div ng-if="!taskRecord.isEditing">
 		                <h5>{{taskRecord.start}}</h5>
 		            </div>
-
 		            <div ng-if="taskRecord.isEditing">
 		                <timepicker ng-model="taskRecord.start" ng-change="editStart()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 		            </div>
 	            </div>
-
 		        <div class="col-md-2 col6">
-	            <!--list of Tasks from taskListArray in JSON-->
-	            
+	            <!--list of Tasks from taskListArray in JSON-->	            
 		            <div ng-if="!taskRecord.isEditing">
 		                <h5>{{taskRecord.finish}}</h5>
 		            </div>
-
 		            <div ng-if="taskRecord.isEditing">
    		                <timepicker ng-model="taskRecord.finish" ng-change="editFinish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
-
 		            </div>
 	            </div>
 	            <div class="col-md-2 col7">
 	            <!--list of Tasks from taskListArray in JSON-->
 		            <div class="raw" ng-if="!taskRecord.isEditing" class="btn-group" dropdown is-open="status.isopen">
-			            <button type="button" class="btn" dropdown-toggle style="text-align:right; width:300px">
+		              <table>
+		                <tr>
+		                  <td>
+			              <button type="button" class="btn" dropdown-toggle style="text-align:right; width:300px">
 			                {{taskRecord.task}}
 			                <i ng-if="taskRecord.status=='started'" class="glyphicon glyphicon-play" style="color:green"></i>
 			                <i ng-if="taskRecord.status=='paused'" class="glyphicon glyphicon-pause" style="color:yellow"></i>
 			                <i ng-if="taskRecord.status=='dropped'" class="glyphicon glyphicon-thumbs-down" style="color:red"></i>
 			                <i ng-if="taskRecord.status=='finished'" class="glyphicon glyphicon-ok-sign" style="color:green"></i>
-			            </button>
-			            <table>
-			            	<tr>
-			            		<td>
-					                <i class="glyphicon glyphicon-info-sign" style="color:blue" ng-click="isCollapsed = !isCollapsed"></i>
-			            		</td>
+			              </button>
+			              </td>
+                 		<td>
+			                <i class="glyphicon glyphicon-info-sign" style="color:blue" ng-click="isCollapsed = !isCollapsed"></i>
+	            		</td>
 			            	</tr>
 			            </table>
 			            <div collapse="!isCollapsed">
@@ -109,7 +97,7 @@
 							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, 'started')">Start &nbsp;</i>
 				            		</td>
 				            		<td>
-							            <i ng-click="ctrl.statusChange(taskRecord._id, 'paused')">Pause &nbsp;</i>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, 'paused')">Pause &nbsp;</i>
 				            		</td>
 				            		<td>
 							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, 'dropped')">Drop &nbsp;</i>
@@ -117,8 +105,8 @@
 				            		<td>
 							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, 'finished')">Finish &nbsp;</i>
 				            		</td>
-				            		</tr>
-			            		</table>			            		
+				            	</tr>
+			            	  </table>
 							</input>
 						</div>
 					    <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
