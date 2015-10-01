@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('schedulerApp')
-    .controller('scheduleController', ['jsonService', '$http', '$rootScope', '$scope', '$window', '$modal', function(jsonService, $http, $rootScope, $scope, $window, $modal) {
+    .controller('scheduleController', ['scheduleService', '$http', '$rootScope', '$scope', '$window', '$modal', function(scheduleService, $http, $rootScope, $scope, $window, $modal) {
         var self = this;
         //used for add a task function;
         var enteredMonth;
@@ -24,7 +24,7 @@ angular.module('schedulerApp')
 
         //WS + MODAL MESSAGE BLOCK
 
-        self.wsMessageArray = jsonService.wsMessage();
+        self.wsMessageArray = scheduleService.wsMessage();
         $rootScope.$on('rootScope:broadcast', function(event, data) {
             if (data.username) {
                 $scope.items = [(data.username + ' asks : ' + data.taskDescription)];
@@ -59,7 +59,7 @@ angular.module('schedulerApp')
         var token = $rootScope.token;
         //function to read 'list' array of tasks from file in data folder
         var taskListArrayRead = function(month, day, year) {
-            jsonService.readList(month, day, year, token).then(function(response) {
+            scheduleService.readList(month, day, year, token).then(function(response) {
                 // Array of tasks to show in UI;
                 var startTime, startHours, startMinutes, 
                     finishTime, finishHours, finishMinutes;
@@ -153,7 +153,7 @@ angular.module('schedulerApp')
                 }
             }
 
-            jsonService.addNewTask({
+            scheduleService.addNewTask({
                 'username' : $scope.newTask.username, 'start' : newTaskStartTime,
                 'finish' : newTaskFinishTime, 'task' : $scope.newTask.task,
                 'day': enteredDay, 'month': enteredMonth, 'year': enteredYear, 'existName': existName
@@ -168,7 +168,7 @@ angular.module('schedulerApp')
         //function to delete a task
         this.delete = function(_id) {
             var deleteTaskID = {'deleteID': _id};
-            jsonService.deleteTask(deleteTaskID).then(function(response, err) {
+            scheduleService.deleteTask(deleteTaskID).then(function(response, err) {
                 taskListArrayRead(enteredMonth, enteredDay, enteredYear);
                 if (err) {
                     console.log(err);
@@ -220,7 +220,7 @@ angular.module('schedulerApp')
                 }
             }
             this.taskListArray[toSaveElementNumber].isEditing = false;
-            jsonService.saveTask(this.taskListArray[toSaveElementNumber]).then(
+            scheduleService.saveTask(this.taskListArray[toSaveElementNumber]).then(
                 function(response) {
                     console.log(response);
                     taskListArrayRead(enteredMonth, enteredDay, enteredYear);
@@ -231,7 +231,7 @@ angular.module('schedulerApp')
             );
         };
         this.logout = function() {
-            jsonService.logout(token).then(
+            scheduleService.logout(token).then(
                 function(response) {
                     $rootScope.token = 0;
                     init();
@@ -241,70 +241,6 @@ angular.module('schedulerApp')
                     console.log(err);
                 }
             );
-        };
-    }])
-    .factory('jsonService', ['$http', '$q', '$websocket', '$rootScope', function($http, $q, $websocket, $rootScope) {
-        return {readList: function(month, day, year, token) {
-            var res = {
-                    method: 'GET',
-                    url: ('/api/schedule/' + month + '/' + day + '/' + year),
-                    headers: {
-                        'x-auth' : token
-                    }
-                };
-            return $http(res);
-            }, addNewTask: function(newTask) {
-                var req = {
-                    method: 'POST',
-                    url: '/api/schedule',
-                    data: newTask,
-                    headers: {'Content-Type': 'application/json'}
-                };
-                return $http(req);
-            }, deleteTask: function(deleteTaskNumber) {
-                var req = {
-                    method: 'DELETE',
-                    url: '/api/schedule/' + deleteTaskNumber.deleteID,
-                    headers: {'Content-Type': 'application/json'}
-                };
-                return $http(req);
-            }, saveTask: function(saveTask) {
-                console.log(saveTask.start);
-                var req = {
-                    method: 'PUT',
-                    url: '/api/schedule/' + saveTask._id,
-                    data: saveTask,
-                    headers: {'Content-Type': 'application/json'}
-                };
-                return $q(function(resolve, reject) {
-                    if ($http(req)) {
-                        resolve($http(req));
-                    } else {
-                        reject($http(req));
-                    }
-                });
-            }, logout: function(token) {
-                var req = {
-                    method: 'PUT',
-                    url: '/rest/logout',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-auth' : token
-                    }
-                };
-                return $http(req);
-            }, wsMessage: function() {
-                var wsConnection = new WebSocket('ws://localhost:9000');
-                var username = null;
-                var userNames = [{'username' : 1}];
-                wsConnection.onmessage = function(e) {
-
-                    var wsData = JSON.parse(e.data).data;
-                    console.log(wsData.username);                    
-                    $rootScope.$broadcast('rootScope:broadcast', wsData);                    
-                };
-                
-            }
         };
     }]);
 
