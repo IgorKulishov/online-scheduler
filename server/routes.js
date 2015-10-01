@@ -12,6 +12,7 @@ module.exports = function(app) {
   app.use('/api/schedule', require('./api/schedule'));
   app.use('/api/users', require('./api/user'));
   app.use('/api/task', require('./api/task'));
+  app.use('/message', require('./api/message/message.controller'));
 
   app.use('/auth', require('./auth'));
   

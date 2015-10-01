@@ -82,28 +82,33 @@
 			                <i ng-if="taskRecord.status=='paused'" class="glyphicon glyphicon-pause" style="color:yellow"></i>
 			                <i ng-if="taskRecord.status=='dropped'" class="glyphicon glyphicon-thumbs-down" style="color:red"></i>
 			                <i ng-if="taskRecord.status=='finished'" class="glyphicon glyphicon-ok-sign" style="color:green"></i>
+			                <i ng-if="taskRecord.status=='question'" class="glyphicon glyphicon-question-sign" style="color:red"></i>
 			              </button>
-			              </td>
-                 		<td>
-			                <i class="glyphicon glyphicon-info-sign" style="color:blue" ng-click="isCollapsed = !isCollapsed"></i>
+			            </td>
+                 		<td ng-click="isCollapsed = !isCollapsed">
+			                <i ng-if="!isCollapsed" class="glyphicon glyphicon-chevron-right" style="color:blue"></i>
+			                <i ng-if="isCollapsed" class="glyphicon glyphicon-chevron-down" style="color:blue"></i>                
 	            		</td>
-			            	</tr>
+			            </tr>
 			            </table>
 			            <div collapse="!isCollapsed">
-							<input class="well well-lg" style="width:300px; background-color:white" placeholder="Task description">
+							<input ng-model="taskRecord.taskDescription" class="well well-lg" style="width:300px; background-color:white" placeholder="Task description">
 							  <table>
 							    <tr>
 				            		<td>
-							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, 'started')">Start &nbsp;</i>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'started', taskRecord.taskDescription)">Start..</i>
 				            		</td>
 				            		<td>
-							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, 'paused')">Pause &nbsp;</i>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'paused', taskRecord.taskDescription)">Pause..</i>
 				            		</td>
 				            		<td>
-							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, 'dropped')">Drop &nbsp;</i>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'dropped', taskRecord.taskDescription)">Drop..</i>
 				            		</td>
 				            		<td>
-							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, 'finished')">Finish &nbsp;</i>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'finished', taskRecord.taskDescription)">Finish..</i>
+				            		</td>
+				            		<td>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'question', taskRecord.taskDescription)">Question</i>
 				            		</td>
 				            	</tr>
 			            	  </table>
@@ -142,9 +147,38 @@
 				</div>
 
 		    </div>
+		    <!--MODAL FOR WS MESSAGES-->
+		    <script type="text/ng-template" id="modalContent.html">
+		        <div class="modal-header">
+		            <h3 class="modal-title">You got message!</h3>
+		        </div>
+		        <div class="modal-body">
+		            <ul>
+		                <li ng-repeat="item in items">
+		                    <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
+		                </li>
+		            </ul>
+		            <!--Selected: <b>{{ selected.item }}</b>-->
+		            Please enter answer: <input style="width:300px" ng-model="answers"></input>
+		        </div>
+		        <div class="modal-footer">
+		            <button class="btn btn-primary" type="button" ng-click="answer(answers)">Answer</button>
+		            <button class="btn btn-primary" type="button" ng-click="ok()">Remind later</button>            
+		            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+		        </div>
+		    </script>
+
+		    <div class="text-warning">
+		    	<h5>{{ selected }}</h5>
+		    </div>
+
+
+		    <!--POTENTIALLY CAN BE USED FOR IMPORTANT MESSAGES & ERRORS-->
 		    <div class="text-warning">
 		    	<h5>{{ctrl.message}}</h5>
 		    </div>
+
+		    <!--ADD NEW TASK PANEL-->
 		    <nav class="navbar navbar-default">
 		        <div class="container-fluid">
 		            <div class="navbar-header">
@@ -176,6 +210,9 @@
 	            </div>
 	        </nav>
 	        <input type="button" ng-click="ctrl.addTask()" value="Add" class="add-button">
+	    </div>
+	    <div ng-repeat="wsMessage in ctrl.wsMessageArray track by $index">
+	        <h5>message: {{wsMessage.username}}</h5>
 	    </div>
 	</div>
 	</div>

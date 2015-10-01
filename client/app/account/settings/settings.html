@@ -3,14 +3,18 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-      <h1>Change Password</h1>
+      <h1>Settings</h1>
     </div>
     <div class="col-sm-12">
-      <form class="form" name="form" ng-submit="changePassword(form)" novalidate>
+      <form class="form" name="form" ng-submit="changePassword(form, user)" novalidate>
+
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" name="user name" class="form-control" ng-model="user.userName" mongoose-error/>
+        </div>
 
         <div class="form-group">
           <label>Current Password</label>
-
           <input type="password" name="password" class="form-control" ng-model="user.oldPassword"
                  mongoose-error/>
           <p class="help-block" ng-show="form.password.$error.mongoose">
@@ -20,7 +24,6 @@
 
         <div class="form-group">
           <label>New Password</label>
-
           <input type="password" name="newPassword" class="form-control" ng-model="user.newPassword"
                  ng-minlength="3"
                  required/>
@@ -30,7 +33,133 @@
           </p>
         </div>
 
-        <p class="help-block"> {{ message }} </p>
+        <div class="container-fluid">
+          </div>
+          </nav>
+          <div class="row">
+              <div class="col-md-2 col1">
+                  <label>Name</label>
+                  <input type="text" name="Name" class="form-control" ng-model="user.name"></input>
+              </div>
+              <div class="col-md-2 col2">
+                <label>Last name</label>
+                <input type="text" name="Last name" class="form-control" ng-model="user.lastName"></input>
+              </div>
+              <div class="col-md-2 col4">
+                <label>Position</label>
+                <input type="text" name="Position" class="form-control" ng-model="user.position"></input>
+              </div>
+              <div class="col-md-2 col4">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" ng-model="user.email"></input>
+              </div>
+            </div>
+          <p class="help-block"> {{ message }} </p>
+
+          <div class="col-sm-12">
+            <h3>Availability:</h3>
+          </div>
+
+            <div class="row">
+              <div class="col-md-2 col1">
+                  <br>
+                  <br>
+                  <button class="add-button" style="width:170px">Monday</button>
+              </div>
+              <div class="col-md-2 col2">
+                <timepicker ng-model="user.mondayFrom" ng-change="mondayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+              <div class="col-md-2 col3">
+                <timepicker ng-model="user.mondayTo" ng-change="mondayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+          </div>
+          <hr>
+          <div class="row">
+              <div class="col-md-2 col1">
+                <br>
+                <br>
+                <button class="add-button" style="width:170px">Tuesday</button>
+              </div>
+              <div class="col-md-2 col2">
+                <timepicker ng-model="user.tuesdayFrom" ng-change="tuesdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+
+              </div>
+              <div class="col-md-2 col3">
+                <timepicker ng-model="user.tuesdayTo" ng-change="tuesdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+          </div>
+          <hr>
+            <div class="row">
+              <div class="col-md-2 col1">
+                  <br>
+                  <br>
+                  <button class="add-button" style="width:170px">Wednesday</h5>
+              </div>
+              <div class="col-md-2 col2">
+                <timepicker ng-model="user.wednesdayFrom" ng-change="wednesdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+
+              </div>
+              <div class="col-md-2 col3">
+                <timepicker ng-model="user.wednesdayTo" ng-change="wednesdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+          </div>
+          <hr>
+            <div class="row">
+              <div class="col-md-2 col1">
+                  <br>
+                  <br>
+                  <button class="add-button" style="width:170px">Thursday</button>
+              </div>
+              <div class="col-md-2 col2">
+                <timepicker ng-model="user.thursdayFrom" ng-change="thursdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+              <div class="col-md-2 col3">
+                <timepicker ng-model="user.thursdayTo" ng-change="thursdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+          </div>
+          <hr>
+            <div class="row">
+              <div class="col-md-2 col1">
+                  <br>
+                  <br>
+                  <button style="width:170px" class="add-button">Friday</button>
+              </div>
+              <div class="col-md-2 col2">
+                <timepicker ng-model="user.fridayFrom" ng-change="fridayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+              <div class="col-md-2 col3">
+                <timepicker ng-model="user.fridayTo" ng-change="fridayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+          </div>
+          <hr>
+            <div class="row">
+              <div class="col-md-2 col1">
+                  <br>
+                  <br>
+                  <button style="width:170px" class="add-button">Saturday</button>
+              </div>
+              <div class="col-md-2 col2">
+                <timepicker ng-model="user.saturdayFrom" ng-change="saturdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+              <div class="col-md-2 col3">
+                <timepicker ng-model="user>saturdayTo" ng-change="saturdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+          </div>
+          <hr>
+            <div class="row">
+              <div class="col-md-2 col1">
+                  <br>
+                  <br>
+                  <button style="width:170px" class="add-button">Sunday</button>
+              </div>
+              <div class="col-md-2 col2">
+                <timepicker ng-model="user.sundayFrom" ng-change="sundayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+              <div class="col-md-2 col3">
+                <timepicker ng-model="user.sundayTo" ng-change="sundayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+              </div>
+          </div>
+          <hr>
 
         <button class="btn btn-lg btn-primary" type="submit">Save changes</button>
       </form>

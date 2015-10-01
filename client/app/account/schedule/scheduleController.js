@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('schedulerApp')
-    .controller('scheduleController', function(jsonService, $http, $rootScope, $scope, $window) {
+    .controller('scheduleController', ['jsonService', '$http', '$rootScope', '$scope', '$window', '$modal', function(jsonService, $http, $rootScope, $scope, $window, $modal) {
         var self = this;
         //used for add a task function;
         var enteredMonth;
@@ -19,14 +19,36 @@ angular.module('schedulerApp')
             $scope.date = null;
         };
 
-        //COLLAPSE
+        //COLLAPSE DETAILS
         $scope.isCollapsed = false;
+
+        //WS + MODAL MESSAGE BLOCK
+
+        self.wsMessageArray = jsonService.wsMessage();
+        $rootScope.$on('rootScope:broadcast', function(event, data) {
+            if (data.username) {
+                $scope.items = [(data.username + ' asks : ' + data.taskDescription)];
+                var modalInstance = $modal.open({
+                    templateUrl: 'modalContent.html',
+                    controller: 'modalInstanceCtrl',
+                    resolve: {
+                        items: function () {
+                            return $scope.items;
+                        }
+                    }
+                });
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.selected = selectedItem;
+                });
+            }
+        });
+
 
         //TIMEPICKER
         var newTaskStartTime = today.getHours()*60;
         var newTaskFinishTime = today.getHours()*60;
 
-        $scope.changedStart = function () {
+        $scope.changeStart = function () {
             newTaskStartTime = $scope.newTask.start.getHours()*60 + $scope.newTask.start.getMinutes();
         };
         $scope.changedFinish = function () {
@@ -50,6 +72,7 @@ angular.module('schedulerApp')
                         startMinutes = startTime - startHours*60;
                         receivedData[i].start = startHours + ':' + startMinutes;
                         receivedData[i].status = false;
+                        receivedData[i].taskDescription = 'task description';
 
                         finishTime = receivedData[i].finish;
                         finishHours = Math.floor(finishTime/60);
@@ -57,27 +80,27 @@ angular.module('schedulerApp')
                         receivedData[i].finish = finishHours + ':' + finishMinutes;                        
                     }
                 }
-               self.taskListArray = receivedData;
+                self.taskListArray = receivedData;
             //<---LOOP TO SHOW USERNAME ONLY ONCE--->
                 //create Array which will contain only unique names
                 var existNameArray = [];
                 //add first element from server data to empty array
                 existNameArray[0] = self.taskListArray[0];
-                for (var i = 0; i < self.taskListArray.length; i++) {
+                for (var ii = 0; ii < self.taskListArray.length; ii++) {
                     //need to make separate function for the second loop
                     var n = existNameArray.length;
                     for (var j = 0; j < n; j++) {
-                        if (i === 0) {
-                            self.taskListArray[i].existName = false;
+                        if (ii === 0) {
+                            self.taskListArray[ii].existName = false;
                             break;
                         }
-                        if ((existNameArray[j].username === self.taskListArray[i].username) && (i !== 0)) {
-                            self.taskListArray[i].existName = true;
+                        if ((existNameArray[j].username === self.taskListArray[ii].username) && (ii !== 0)) {
+                            self.taskListArray[ii].existName = true;
                             break;
                         }
-                        if ((existNameArray[j].username !== self.taskListArray[i].username) && (j === n - 1)) {
-                            self.taskListArray[i].existName = false;
-                            existNameArray.push(self.taskListArray[i]);
+                        if ((existNameArray[j].username !== self.taskListArray[ii].username) && (j === n - 1)) {
+                            self.taskListArray[ii].existName = false;
+                            existNameArray.push(self.taskListArray[ii]);
                             break;
                         }
                     }
@@ -152,12 +175,16 @@ angular.module('schedulerApp')
                 }
             });
         };
-        //change status        
-        this.statusChange = function(id, flag) {
+        //change status
+        this.statusChange = function(id, username, flag, taskDescription) {
+            
             for (var i = 0; i < this.taskListArray.length; i++) {
                 if (this.taskListArray[i]._id === id) {
                     this.taskListArray[i].status = flag;
-                    
+                    if (flag === 'question') {
+                        $window.alert('Send message to your team?');
+                        $http.get('message/' + username + '/' + taskDescription);
+                    }
                 }
             }
         };
@@ -215,8 +242,8 @@ angular.module('schedulerApp')
                 }
             );
         };
-    })
-    .factory('jsonService', ['$http', '$q', function($http, $q) {
+    }])
+    .factory('jsonService', ['$http', '$q', '$websocket', '$rootScope', function($http, $q, $websocket, $rootScope) {
         return {readList: function(month, day, year, token) {
             var res = {
                     method: 'GET',
@@ -259,13 +286,46 @@ angular.module('schedulerApp')
             }, logout: function(token) {
                 var req = {
                     method: 'PUT',
-                    url: '/rest/logout',                    
+                    url: '/rest/logout',
                     headers: {
                         'Content-Type': 'application/json',
                         'x-auth' : token
                     }
                 };
                 return $http(req);
+            }, wsMessage: function() {
+                var wsConnection = new WebSocket('ws://localhost:9000');
+                var username = null;
+                var userNames = [{'username' : 1}];
+                wsConnection.onmessage = function(e) {
+
+                    var wsData = JSON.parse(e.data).data;
+                    console.log(wsData.username);                    
+                    $rootScope.$broadcast('rootScope:broadcast', wsData);                    
+                };
+                
             }
-        };         
+        };
     }]);
+
+//controller for modal
+angular.module('schedulerApp').controller('modalInstanceCtrl', function ($scope, $modalInstance, items) {
+
+  $scope.items = items;
+  $scope.selected = {
+      item: $scope.items[0]
+  };
+
+  $scope.answer = function (answer) {      
+      $modalInstance.close(answer);
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+  
+});
