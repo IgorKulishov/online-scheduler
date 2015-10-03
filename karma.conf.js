@@ -19,6 +19,8 @@ module.exports = function(config) {
       'client/bower_components/angular-sanitize/angular-sanitize.js',
       'client/bower_components/angular-route/angular-route.js',
       'client/bower_components/lodash/dist/lodash.compat.js',
+      'client/bower_components/angular-websocket/angular-websocket.min.js',
+      'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'client/app/app.js',
       'client/app/**/*.js',
       'client/components/**/*.js',

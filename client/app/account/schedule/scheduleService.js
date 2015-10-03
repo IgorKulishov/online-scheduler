@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('schedulerApp')
     .factory('scheduleService', ['$http', '$q', '$websocket', '$rootScope', function($http, $q, $websocket, $rootScope) {
         return {readList: function(month, day, year, token) {
@@ -51,8 +53,6 @@ angular.module('schedulerApp')
                 return $http(req);
             }, wsMessage: function() {
                 var wsConnection = new WebSocket('ws://localhost:9000');
-                var username = null;
-                var userNames = [{'username' : 1}];
                 wsConnection.onmessage = function(e) {
 
                     var wsData = JSON.parse(e.data).data;
