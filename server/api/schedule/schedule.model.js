@@ -12,8 +12,8 @@ var ScheduleSchema = new Schema({
     "month": Number,
     "year": Number,
     "task": String,
-    "start": Number,
-    "finish": Number,
+    "start": String,
+    "finish": String,
     "existName": Boolean
 });
 

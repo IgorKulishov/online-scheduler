@@ -12,8 +12,16 @@ angular.module('schedulerApp')
         $scope.open = function() {
             $scope.status = true;
         };
-
-        var today = new Date();
+        //Start time by default in time picker
+        var taskStartTime = new Date();
+        taskStartTime.setHours(taskStartTime.getHours() + 1);
+        taskStartTime.setMinutes(0);
+        $scope.newTaskStart = taskStartTime;
+        //Finish time by default in time picker
+        var taskFinishTime = new Date();
+        taskFinishTime.setHours(taskFinishTime.getHours() + 2);
+        taskFinishTime.setMinutes(0);
+        $scope.newTaskFinish = taskFinishTime;
 
         $scope.clear = function() {
             $scope.date = null;
@@ -43,13 +51,12 @@ angular.module('schedulerApp')
             }
         });
 
-
         //TIMEPICKER
-        var newTaskStartTime = today.getHours()*60;
-        var newTaskFinishTime = today.getHours()*60;
+        var newTaskStartTime = taskStartTime;
+        var newTaskFinishTime = taskFinishTime;
 
         $scope.changeStart = function () {
-            newTaskStartTime = $scope.newTask.start.getHours()*60 + $scope.newTask.start.getMinutes();
+            newTaskStartTime = $scope.newTaskStart;            
             if (newTaskStartTime > newTaskFinishTime) {
                 $scope.timepickerMessage = '"Start" should be earlier then "Finish"';
             } else {
@@ -57,7 +64,8 @@ angular.module('schedulerApp')
             }
         };
         $scope.changeFinish = function () {
-            newTaskFinishTime = $scope.newTask.finish.getHours()*60 + $scope.newTask.finish.getMinutes();
+            newTaskFinishTime = $scope.newTaskFinish;
+            alert(newTaskFinishTime.getHours());
             if (newTaskFinishTime < newTaskStartTime) {
                 $scope.timepickerMessage = '"Finish" should be later then "Start"';
             } else {
@@ -77,16 +85,16 @@ angular.module('schedulerApp')
                 var receivedData = response.data;
                 if (receivedData.length !== 0) {
                     for (var i = 0; i < receivedData.length; i++) {
-                        startTime = receivedData[i].start;
-                        startHours = Math.floor(startTime/60);
-                        startMinutes = startTime - startHours*60;
+                        startTime = new Date(receivedData[i].start);
+                        startHours = startTime.getHours();
+                        startMinutes = startTime.getMinutes();
                         receivedData[i].start = startHours + ':' + startMinutes;
                         receivedData[i].status = false;
                         receivedData[i].taskDescription = 'task description';
 
-                        finishTime = receivedData[i].finish;
-                        finishHours = Math.floor(finishTime/60);
-                        finishMinutes = finishTime - finishHours*60;
+                        finishTime = new Date(receivedData[i].finish);
+                        finishHours = finishTime.getHours();
+                        finishMinutes = finishTime.getMinutes();
                         receivedData[i].finish = finishHours + ':' + finishMinutes;                        
                     }
                 }
