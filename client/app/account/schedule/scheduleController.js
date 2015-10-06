@@ -64,8 +64,7 @@ angular.module('schedulerApp')
             }
         };
         $scope.changeFinish = function () {
-            newTaskFinishTime = $scope.newTaskFinish;
-            alert(newTaskFinishTime.getHours());
+            newTaskFinishTime = $scope.newTaskFinish;            
             if (newTaskFinishTime < newTaskStartTime) {
                 $scope.timepickerMessage = '"Finish" should be later then "Start"';
             } else {
@@ -170,17 +169,19 @@ angular.module('schedulerApp')
                     break;
                 }
             }
-
-            scheduleService.addNewTask({
-                'username' : $scope.newTask.username, 'start' : newTaskStartTime,
-                'finish' : newTaskFinishTime, 'task' : $scope.newTask.task,
-                'day': enteredDay, 'month': enteredMonth, 'year': enteredYear, 'existName': existName
-            }).then(function(response, err) {
-                taskListArrayRead(enteredMonth, enteredDay, enteredYear);
-                if (err) {
-                    console.error(err); 
-                }
-            });
+            //start should be earlier then finish
+            if (newTaskStartTime < newTaskFinishTime) {
+                scheduleService.addNewTask({
+                    'username' : $scope.newTask.username, 'start' : newTaskStartTime,
+                    'finish' : newTaskFinishTime, 'task' : $scope.newTask.task,
+                    'day': enteredDay, 'month': enteredMonth, 'year': enteredYear, 'existName': existName
+                }).then(function(response, err) {
+                    taskListArrayRead(enteredMonth, enteredDay, enteredYear);
+                    if (err) {
+                        console.error(err); 
+                    }
+                });
+            }
             init();
         };
         //function to delete a task
