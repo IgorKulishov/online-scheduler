@@ -50,9 +50,19 @@ angular.module('schedulerApp')
 
         $scope.changeStart = function () {
             newTaskStartTime = $scope.newTask.start.getHours()*60 + $scope.newTask.start.getMinutes();
+            if (newTaskStartTime > newTaskFinishTime) {
+                $scope.timepickerMessage = '"Start" should be earlier then "Finish"';
+            } else {
+                $scope.timepickerMessage = '';
+            }
         };
-        $scope.changedFinish = function () {
+        $scope.changeFinish = function () {
             newTaskFinishTime = $scope.newTask.finish.getHours()*60 + $scope.newTask.finish.getMinutes();
+            if (newTaskFinishTime < newTaskStartTime) {
+                $scope.timepickerMessage = '"Finish" should be later then "Start"';
+            } else {
+                $scope.timepickerMessage = '';
+            }
         };
 
         //not save option to use $rootScope to pass token (need to find better way)

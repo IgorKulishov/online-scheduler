@@ -193,11 +193,11 @@
 	                        </div>
 	                        <div class="col-md-2 col2">
 	                            <h4>Start</h4>
-		                        <timepicker ng-model="newTask.start" ng-change="changedStart()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
+		                        <timepicker ng-model="newTask.start" ng-change="changeStart()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 	                        </div>
 	                        <div class="col-md-2 col3">
 	                            <h4>Finish</h4>
-	                            <timepicker ng-model="newTask.finish" ng-change="changedFinish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
+	                            <timepicker ng-model="newTask.finish" ng-change="changeFinish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 	                        </div>
 	                        <div class="col-md-1 col4">
 	                            <h4>Task</h4>
@@ -209,8 +209,15 @@
 	                </div>
 	            </div>
 	        </nav>
+
+	    <!--Timepicker ERROR message-->
+	    <div style="color:red" >
+	        <h5>{{timepickerMessage}}</h5>
+	    </div>
+
 	        <input type="button" ng-click="ctrl.addTask()" value="Add" class="add-button">
 	    </div>
+	    <!--Message from 'ws' broadcast-->
 	    <div ng-repeat="wsMessage in ctrl.wsMessageArray track by $index">
 	        <h5>message: {{wsMessage.username}}</h5>
 	    </div>

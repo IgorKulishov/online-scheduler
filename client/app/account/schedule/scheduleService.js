@@ -52,14 +52,14 @@ angular.module('schedulerApp')
                 };
                 return $http(req);
             }, wsMessage: function() {
-                var wsConnection = new WebSocket('ws://localhost:9000');
+ /*               var wsConnection = new WebSocket('ws://team-scheduler.herokuapp.com');
                 wsConnection.onmessage = function(e) {
 
                     var wsData = JSON.parse(e.data).data;
                     console.log(wsData.username);                    
                     $rootScope.$broadcast('rootScope:broadcast', wsData);                    
                 };
-                
+                */
             }
         };
     }]);
