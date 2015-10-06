@@ -3,10 +3,10 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-      <h1>Settings</h1>
+      <h1>My properties</h1>
     </div>
     <div class="col-sm-12">
-      <form class="form" name="form" ng-submit="changePassword(form, user)" novalidate>
+      <form class="form" name="form" ng-submit="submitInfo(form, user)" novalidate>
 
         <div class="form-group">
           <label>Username</label>
@@ -67,10 +67,10 @@
                   <button class="add-button" style="width:170px">Monday</button>
               </div>
               <div class="col-md-2 col2">
-                <timepicker ng-model="user.mondayFrom" ng-change="mondayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userMondayFrom" ng-change="mondayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
               <div class="col-md-2 col3">
-                <timepicker ng-model="user.mondayTo" ng-change="mondayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userMondayTo" ng-change="mondayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
           </div>
           <hr>
@@ -81,11 +81,11 @@
                 <button class="add-button" style="width:170px">Tuesday</button>
               </div>
               <div class="col-md-2 col2">
-                <timepicker ng-model="user.tuesdayFrom" ng-change="tuesdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userTuesdayFrom" ng-change="tuesdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
 
               </div>
               <div class="col-md-2 col3">
-                <timepicker ng-model="user.tuesdayTo" ng-change="tuesdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userTuesdayTo" ng-change="tuesdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
           </div>
           <hr>
@@ -96,11 +96,11 @@
                   <button class="add-button" style="width:170px">Wednesday</h5>
               </div>
               <div class="col-md-2 col2">
-                <timepicker ng-model="user.wednesdayFrom" ng-change="wednesdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userWednesdayFrom" ng-change="wednesdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
 
               </div>
               <div class="col-md-2 col3">
-                <timepicker ng-model="user.wednesdayTo" ng-change="wednesdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userWednesdayTo" ng-change="wednesdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
           </div>
           <hr>
@@ -111,10 +111,10 @@
                   <button class="add-button" style="width:170px">Thursday</button>
               </div>
               <div class="col-md-2 col2">
-                <timepicker ng-model="user.thursdayFrom" ng-change="thursdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userThursdayFrom" ng-change="thursdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
               <div class="col-md-2 col3">
-                <timepicker ng-model="user.thursdayTo" ng-change="thursdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userThursdayTo" ng-change="thursdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
           </div>
           <hr>
@@ -125,10 +125,10 @@
                   <button style="width:170px" class="add-button">Friday</button>
               </div>
               <div class="col-md-2 col2">
-                <timepicker ng-model="user.fridayFrom" ng-change="fridayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userFridayFrom" ng-change="fridayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
               <div class="col-md-2 col3">
-                <timepicker ng-model="user.fridayTo" ng-change="fridayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userFridayTo" ng-change="fridayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
           </div>
           <hr>
@@ -139,10 +139,10 @@
                   <button style="width:170px" class="add-button">Saturday</button>
               </div>
               <div class="col-md-2 col2">
-                <timepicker ng-model="user.saturdayFrom" ng-change="saturdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userSaturdayFrom" ng-change="saturdayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
               <div class="col-md-2 col3">
-                <timepicker ng-model="user>saturdayTo" ng-change="saturdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userSaturdayTo" ng-change="saturdayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
           </div>
           <hr>
@@ -153,10 +153,10 @@
                   <button style="width:170px" class="add-button">Sunday</button>
               </div>
               <div class="col-md-2 col2">
-                <timepicker ng-model="user.sundayFrom" ng-change="sundayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userSundayFrom" ng-change="sundayStart()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
               <div class="col-md-2 col3">
-                <timepicker ng-model="user.sundayTo" ng-change="sundayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
+                <timepicker ng-model="userSundayTo" ng-change="sundayFinish()" hour-step="1" minute-step="30" show-meridian="ismeridian"></timepicker>
               </div>
           </div>
           <hr>

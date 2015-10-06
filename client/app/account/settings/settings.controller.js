@@ -3,88 +3,110 @@
 angular.module('schedulerApp')
   .controller('SettingsCtrl', function ($scope, User, Auth) {
 
-    var today = new Date();
+    var timeStart = new Date();
+    var timeFinish = new Date();
+
+    //default start time for days
+    timeStart.setHours(6);
+    timeStart.setMinutes(0);
+    //default finish time for days
+    timeFinish.setHours(23);
+    timeFinish.setMinutes(0);
+
     //set Monday
-    var mondayStart = today.getHours()*60;
-    var mondayFinish = today.getHours()*60;
+    var mondayStart = timeStart;
+    var mondayFinish;
     //set Tuesday
-    var tuesdayStart = today.getHours()*60;
-    var tuesdayFinish = today.getHours()*60;
+    var tuesdayStart = timeStart;
+    var tuesdayFinish;
     //set Wednesday
-    var wednesdayStart = today.getHours()*60;
-    var wednesdayFinish = today.getHours()*60;
+    var wednesdayStart;
+    var wednesdayFinish;
     //set Thursday
-    var thursdayStart = today.getHours()*60;
-    var thursdayFinish = today.getHours()*60;
+    var thursdayStart;
+    var thursdayFinish;
     //set Friday
-    var fridayStart = today.getHours()*60;
-    var fridayFinish = today.getHours()*60;
+    var fridayStart;
+    var fridayFinish;
     //set Saturday
-    var saturdayStart = today.getHours()*60;
-    var saturdayFinish = today.getHours()*60;
+    var saturdayStart;
+    var saturdayFinish;
     //set Sunday
-    var sundayStart = today.getHours()*60;
-    var sundayFinish = today.getHours()*60;
-
-
+    var sundayStart;
+    var sundayFinish;
+    
     //Monday
+    $scope.userMondayFrom = timeStart;
+    $scope.userMondayTo = timeFinish;
     $scope.mondayStart = function () {
-        mondayStart = $scope.user.mondayFrom.getHours()*60 + $scope.user.mondayFrom.getMinutes();
+        mondayStart = $scope.userMondayFrom;
     };
     $scope.mondayFinish = function () {
-        mondayFinish = $scope.user.mondayTo.getHours()*60 + $scope.user.mondayTo.getMinutes();
+        mondayFinish = $scope.userMondayTo.getHours()*60 + $scope.userMondayTo.getMinutes();
     };
     //Tuesday
+    $scope.userTuesdayFrom = timeStart;
+    $scope.userTuesdayTo = timeFinish;
     $scope.tuesdayStart = function () {
-        tuesdayStart = $scope.user.tuesdayFrom.getHours()*60 + $scope.user.tuesdayFrom.getMinutes();
+        tuesdayStart = $scope.userTuesdayFrom.getHours()*60 + $scope.userTuesdayFrom.getMinutes();        
     };
     $scope.tuesdayFinish = function () {
-        tuesdayFinish = $scope.user.tuesdayTo.getHours()*60 + $scope.user.tuesdayTo.getMinutes();
+        tuesdayFinish = $scope.userTuesdayTo.getHours()*60 + $scope.userTuesdayTo.getMinutes();        
     };
     //Wednesday
+    $scope.userWednesdayFrom = timeStart;
+    $scope.userWednesdayTo = timeFinish;
     $scope.wednesdayStart = function () {
-        wednesdayStart = $scope.user.wednesdayFrom.getHours()*60 + $scope.user.wednesdayFrom.getMinutes();
+        wednesdayStart = $scope.userWednesdayFrom.getHours()*60 + $scope.userWednesdayFrom.getMinutes();        
     };
     $scope.wednesdayFinish = function () {
-        wednesdayFinish = $scope.user.wednesdayTo.getHours()*60 + $scope.user.wednesdayTo.getMinutes();
+        wednesdayFinish = $scope.userWednesdayTo.getHours()*60 + $scope.userWednesdayTo.getMinutes();        
     };
     //Thursday
+    $scope.userThursdayFrom = timeStart;
+    $scope.userThursdayTo = timeFinish;
     $scope.thursdayStart = function () {
-        thursdayStart = $scope.user.thursdayFrom.getHours()*60 + $scope.user.thursdayFrom.getMinutes();
+        thursdayStart = $scope.userThursdayFrom.getHours()*60 + $scope.userThursdayFrom.getMinutes();
         
     };
     $scope.thursdayFinish = function () {
-        thursdayFinish = $scope.user.thursdayTo.getHours()*60 + $scope.user.thursdayTo.getMinutes();
+        thursdayFinish = $scope.userThursdayTo.getHours()*60 + $scope.userThursdayTo.getMinutes();
         
     };
 
     //Friday
+    $scope.userFridayFrom = timeStart;
+    $scope.userFridayTo = timeFinish;
     $scope.fridayStart = function () {
-        fridayStart = $scope.user.fridayFrom.getHours()*60 + $scope.user.fridayFrom.getMinutes();
+        fridayStart = $scope.userFridayFrom.getHours()*60 + $scope.userFridayFrom.getMinutes();
     };
     $scope.fridayFinish = function () {
-        fridayFinish = $scope.user.fridayTo.getHours()*60 + $scope.user.fridayTo.getMinutes();
+        fridayFinish = $scope.userFridayTo.getHours()*60 + $scope.userFridayTo.getMinutes();
     };
 
     //Saturday
+    $scope.userSaturdayFrom = timeStart;
+    $scope.userSaturdayTo = timeFinish;
     $scope.saturdayStart = function () {
-        saturdayStart = $scope.user.saturdayFrom.getHours()*60 + $scope.user.saturdayFrom.getMinutes();
+        saturdayStart = $scope.userSaturdayFrom.getHours()*60 + $scope.userSaturdayFrom.getMinutes();
     };
     $scope.saturdayFinish = function () {
-        saturdayFinish = $scope.user.saturdayTo.getHours()*60 + $scope.user.saturdayTo.getMinutes();
+        saturdayFinish = $scope.userSaturdayTo.getHours()*60 + $scope.userSaturdayTo.getMinutes();
     };
 
     //Sunday
+    $scope.userSundayFrom = timeStart;
+    $scope.userSundayTo = timeFinish;
     $scope.sundayStart = function () {
-        sundayStart = $scope.user.sundayFrom.getHours()*60 + $scope.user.sundayFrom.getMinutes();
+        sundayStart = $scope.userSundayFrom.getHours()*60 + $scope.userSundayFrom.getMinutes();
     };
     $scope.saturdayFinish = function () {
-        sundayFinish = $scope.user.sundayTo.getHours()*60 + $scope.user.surndayTo.getMinutes();
+        sundayFinish = $scope.userSundayTo.getHours()*60 + $scope.userSurndayTo.getMinutes();
     };
 
     $scope.errors = {};
 
-    $scope.changePassword = function(form, user) {
+    $scope.submitInfo = function(form, user) {
       $scope.submitted = true;
       if(form.$valid) {
         Auth.changePassword( $scope.user.oldPassword, $scope.user.newPassword )
@@ -107,6 +129,6 @@ angular.module('schedulerApp')
           'position': user.position,
           'mondayFrom': mondayStart
       };
-      console.log(userProperties.name + ' / ' + sundayStart/60 + ' / ' + sundayFinish/60);
+      alert(userProperties.name + ' starts ' + mondayStart.getHours() + ':' + mondayStart.getMinutes());
 		};
   });
