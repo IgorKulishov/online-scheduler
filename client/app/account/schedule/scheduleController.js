@@ -219,11 +219,11 @@ angular.module('schedulerApp')
             }
             //to adjust start time using 'timepicker' in edit mode
             $scope.editStart = function () {
-               self.taskListArray[arrayId].start.time = self.taskListArray[arrayId].start.getHours()*60 + self.taskListArray[arrayId].start.getMinutes();
+               self.taskListArray[arrayId].start.time = self.taskListArray[arrayId].start;
             };
             //to adjust finish time using 'timepicker' in edit mode
             $scope.editFinish = function () {
-               self.taskListArray[arrayId].finish.time = self.taskListArray[arrayId].finish.getHours()*60 + self.taskListArray[arrayId].finish.getMinutes();
+               self.taskListArray[arrayId].finish.time = self.taskListArray[arrayId].finish;
             };
 
         };
