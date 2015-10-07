@@ -87,14 +87,17 @@ angular.module('schedulerApp')
                         startTime = new Date(receivedData[i].start);
                         startHours = startTime.getHours();
                         startMinutes = startTime.getMinutes();
+                        if (startMinutes < 10)
+                            startMinutes = '0' + startMinutes;
                         receivedData[i].start = startHours + ':' + startMinutes;
                         receivedData[i].status = false;
                         receivedData[i].taskDescription = 'task description';
-
                         finishTime = new Date(receivedData[i].finish);
                         finishHours = finishTime.getHours();
                         finishMinutes = finishTime.getMinutes();
-                        receivedData[i].finish = finishHours + ':' + finishMinutes;                        
+                        if (finishMinutes < 10)
+                            finishMinutes = '0' + finishMinutes;
+                        receivedData[i].finish = finishHours + ':' + finishMinutes;
                     }
                 }
                 self.taskListArray = receivedData;
