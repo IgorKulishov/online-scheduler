@@ -209,18 +209,16 @@ angular.module('schedulerApp')
                     arrayId = i;
                 }
             }
-            var nowTestTime = new Date();
-            nowTestTime.setHours(1);
-            nowTestTime.setMinutes(15);
-            $scope.startTimeMessage = nowTestTime;
-            $scope.finishTimeMessage = nowTestTime;
+
+            $scope.startTimeMessage = new Date(this.taskListArray[arrayId].start);
+            $scope.finishTimeMessage = new Date(this.taskListArray[arrayId].finish);
             //to adjust start time using 'timepicker' in edit mode
             $scope.editStart = function () {
-               self.taskListArray[arrayId].start.time = self.taskListArray[arrayId].start;
+               this.taskListArray[arrayId].start = $scope.startTimeMessage;
             };
             //to adjust finish time using 'timepicker' in edit mode
             $scope.editFinish = function () {
-               self.taskListArray[arrayId].finish.time = self.taskListArray[arrayId].finish;
+               this.taskListArray[arrayId].finish = $scope.startTimeMessage;
             };
         };
         //this function is to Save edited Task
@@ -230,8 +228,8 @@ angular.module('schedulerApp')
             for (var i = 0; i < scheduleOfTeamArray.length; i++) {
                 if (scheduleOfTeamArray[i]._id === _id) {
                     toSaveElementNumber = i;
-                    this.taskListArray[toSaveElementNumber].start = this.taskListArray[toSaveElementNumber].start.time;
-                    this.taskListArray[toSaveElementNumber].finish = this.taskListArray[toSaveElementNumber].finish.time;
+                    this.taskListArray[toSaveElementNumber].start = this.taskListArray[toSaveElementNumber].start;
+                    this.taskListArray[toSaveElementNumber].finish = this.taskListArray[toSaveElementNumber].finish;
                 }
             }
             this.taskListArray[toSaveElementNumber].isEditing = false;
