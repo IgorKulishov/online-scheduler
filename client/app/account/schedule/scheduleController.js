@@ -209,15 +209,13 @@ angular.module('schedulerApp')
                     arrayId = i;
                 }
             }
-            //$scope.startTimeMessage = new Date(this.taskListArray[arrayId].start);
-            //$scope.finishTimeMessage = new Date(this.taskListArray[arrayId].finish);
-            //to adjust start time using 'timepicker' in edit mode
+
             $scope.editStart = function () {
-                this.taskListArray[arrayId].start = $scope.startTimeMessage;
+
             };
             //to adjust finish time using 'timepicker' in edit mode
             $scope.editFinish = function () {
-               this.taskListArray[arrayId].finish = $scope.startTimeMessage;
+
             };
         };
         //this function is to Save edited Task
@@ -226,9 +224,7 @@ angular.module('schedulerApp')
             var toSaveElementNumber;
             for (var i = 0; i < scheduleOfTeamArray.length; i++) {
                 if (scheduleOfTeamArray[i]._id === _id) {
-                    toSaveElementNumber = i;
-//                    this.taskListArray[toSaveElementNumber].start = this.taskListArray[toSaveElementNumber].start;
-                    alert(this.taskListArray[toSaveElementNumber].finish);
+                    toSaveElementNumber = i;                
                 }
             }
             this.taskListArray[toSaveElementNumber].isEditing = false;
