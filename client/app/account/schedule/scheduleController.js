@@ -56,7 +56,7 @@ angular.module('schedulerApp')
         var newTaskFinishTime = taskFinishTime;
 
         $scope.changeStart = function () {
-            newTaskStartTime = $scope.newTaskStart;            
+            newTaskStartTime = $scope.newTaskStart;
             if (newTaskStartTime > newTaskFinishTime) {
                 $scope.timepickerMessage = '"Start" should be earlier then "Finish"';
             } else {
@@ -64,7 +64,7 @@ angular.module('schedulerApp')
             }
         };
         $scope.changeFinish = function () {
-            newTaskFinishTime = $scope.newTaskFinish;            
+            newTaskFinishTime = $scope.newTaskFinish;
             if (newTaskFinishTime < newTaskStartTime) {
                 $scope.timepickerMessage = '"Finish" should be later then "Start"';
             } else {
@@ -77,27 +77,14 @@ angular.module('schedulerApp')
         //function to read 'list' array of tasks from file in data folder
         var taskListArrayRead = function(month, day, year) {
             scheduleService.readList(month, day, year, token).then(function(response) {
-                // Array of tasks to show in UI;
-                var startTime, startHours, startMinutes, 
-                    finishTime, finishHours, finishMinutes;
-
+                // Loop to tranfer time from string to time format and to assign default status and taskDescription
                 var receivedData = response.data;
                 if (receivedData.length !== 0) {
                     for (var i = 0; i < receivedData.length; i++) {
-                        startTime = new Date(receivedData[i].start);
-                        startHours = startTime.getHours();
-                        startMinutes = startTime.getMinutes();
-                        if (startMinutes < 10)
-                            startMinutes = '0' + startMinutes;
-                        receivedData[i].start = startHours + ':' + startMinutes;
+                        receivedData[i].start = new Date(receivedData[i].start);
                         receivedData[i].status = false;
                         receivedData[i].taskDescription = 'task description';
-                        finishTime = new Date(receivedData[i].finish);
-                        finishHours = finishTime.getHours();
-                        finishMinutes = finishTime.getMinutes();
-                        if (finishMinutes < 10)
-                            finishMinutes = '0' + finishMinutes;
-                        receivedData[i].finish = finishHours + ':' + finishMinutes;
+                        receivedData[i].finish = new Date(receivedData[i].finish);
                     }
                 }
                 self.taskListArray = receivedData;
@@ -211,6 +198,8 @@ angular.module('schedulerApp')
             }
         };
 
+        var taskListArrayStartTime = [];
+        var taskListArrayFinishTime = [];
         //this function is to edit a Task
         this.edit = function(_id) {
             var arrayId;
@@ -220,6 +209,11 @@ angular.module('schedulerApp')
                     arrayId = i;
                 }
             }
+            var nowTestTime = new Date();
+            nowTestTime.setHours(1);
+            nowTestTime.setMinutes(15);
+            $scope.startTimeMessage = nowTestTime;
+            $scope.finishTimeMessage = nowTestTime;
             //to adjust start time using 'timepicker' in edit mode
             $scope.editStart = function () {
                self.taskListArray[arrayId].start.time = self.taskListArray[arrayId].start;
@@ -228,7 +222,6 @@ angular.module('schedulerApp')
             $scope.editFinish = function () {
                self.taskListArray[arrayId].finish.time = self.taskListArray[arrayId].finish;
             };
-
         };
         //this function is to Save edited Task
         this.save = function(_id) {
@@ -242,15 +235,20 @@ angular.module('schedulerApp')
                 }
             }
             this.taskListArray[toSaveElementNumber].isEditing = false;
-            scheduleService.saveTask(this.taskListArray[toSaveElementNumber]).then(
-                function(response) {
-                    console.log(response);
-                    taskListArrayRead(enteredMonth, enteredDay, enteredYear);
-                },
-                function(err) {
-                    console.log(err);
-                }
-            );
+            if (this.taskListArray[toSaveElementNumber].start < this.taskListArray[toSaveElementNumber].finish) {
+                $scope.editMessage = '';
+                scheduleService.saveTask(this.taskListArray[toSaveElementNumber]).then(
+                    function(response) {
+                        console.log(response);
+                        taskListArrayRead(enteredMonth, enteredDay, enteredYear);
+                    },
+                    function(err) {
+                        console.log(err);
+                    }
+                );
+            } else {
+                $scope.editMessage = 'start should be less then finish';
+            }
         };
         this.logout = function() {
             scheduleService.logout(token).then(

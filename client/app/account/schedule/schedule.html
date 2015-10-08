@@ -55,19 +55,23 @@
 	            <div class="col-md-2 col3">
 	            <!--list of Tasks from taskListArray in JSON-->	            
 		            <div ng-if="!taskRecord.isEditing">
-		                <h5>{{taskRecord.start}}</h5>
+		                <h5>{{taskRecord.start | date:'HH:mm'}}</h5>
 		            </div>
 		            <div ng-if="taskRecord.isEditing">
-		                <timepicker ng-model="taskRecord.start" ng-change="editStart()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
+		                <timepicker ng-model="startTimeMessage" ng-change="editStart()" hour-step="1" minute-step="15" show-meridian="ismeridian">	
+		                </timepicker>
+		                <div style="color:red">
+	                        <h5>{{editMessage}}</h5>
+	                    </div>
 		            </div>
 	            </div>
 		        <div class="col-md-2 col6">
 	            <!--list of Tasks from taskListArray in JSON-->	            
 		            <div ng-if="!taskRecord.isEditing">
-		                <h5>{{taskRecord.finish}}</h5>
+		                <h5>{{taskRecord.finish| date:'HH:mm'}}</h5>
 		            </div>
 		            <div ng-if="taskRecord.isEditing">
-   		                <timepicker ng-model="taskRecord.finish" ng-change="editFinish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
+   		                <timepicker ng-model="finishTimeMessage" ng-change="editFinish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 		            </div>
 	            </div>
 	            <div class="col-md-2 col7">
@@ -114,6 +118,7 @@
 			            	  </table>
 							</input>
 						</div>
+
 					    <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
 				            <li role="menuitem"><a href="#">Start task</a></li>
 				            <li role="menuitem"><a href="#">Finish task</a></li>
@@ -224,6 +229,7 @@
 	</div>
 	</div>
 </div>
+<h3><time datetime="hh:mm">{{startTimeMessage | date:'HH:mm'}}</time></h3>
 
 <footer class="footer">
   <div class="container">
