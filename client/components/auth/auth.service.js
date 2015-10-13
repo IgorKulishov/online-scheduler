@@ -133,7 +133,9 @@ angular.module('schedulerApp')
        * @return {Boolean}
        */
       isAdmin: function() {
-        return currentUser.role === 'admin';
+        //temporary changed from 'admin' to 'user' (will change back)
+        //change on the server side and return currentUser.role === 'admin';
+        return currentUser.role === 'user';
       },
 
       /**

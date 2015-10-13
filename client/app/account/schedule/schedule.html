@@ -58,7 +58,7 @@
 		                <h5>{{taskRecord.start | date:'HH:mm'}}</h5>
 		            </div>
 		            <div ng-if="taskRecord.isEditing">
-		                <timepicker ng-model="taskRecord.start" ng-change="editStart()" hour-step="1" minute-step="15" show-meridian="ismeridian">	
+		                <timepicker ng-model="taskRecord.start" ng-change="editStart()" hour-step="1" minute-step="15" show-meridian="ismeridian">
 		                </timepicker>
 		                <div style="color:red">
 	                        <h5>{{editMessage}}</h5>

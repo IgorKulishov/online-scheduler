@@ -1,7 +1,11 @@
 'use strict';
 
 angular.module('schedulerApp')
-    .controller('scheduleController', ['scheduleService', '$http', '$rootScope', '$scope', '$window', '$modal', function(scheduleService, $http, $rootScope, $scope, $window, $modal) {
+    .controller('scheduleController', ['scheduleService', '$http', '$rootScope', '$scope', '$window', '$modal', 'Auth', 'User', '$location', '$cookieStore', function(scheduleService, $http, $rootScope, $scope, $window, $modal, Auth, User, $location, $cookieStore) {
+        
+        if (!$cookieStore.get('token'))
+            $location.path('/login');
+
         var self = this;
         //used for add a task function;
         var enteredMonth;
@@ -209,7 +213,7 @@ angular.module('schedulerApp')
                     arrayId = i;
                 }
             }
-
+            //to adjust finish time using 'timepicker' in edit mode
             $scope.editStart = function () {
 
             };
