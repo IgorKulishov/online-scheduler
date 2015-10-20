@@ -87,7 +87,7 @@ angular.module('schedulerApp')
                     for (var i = 0; i < receivedData.length; i++) {
                         receivedData[i].start = new Date(receivedData[i].start);
                         receivedData[i].status = false;
-                        receivedData[i].taskDescription = 'task description';
+                        //receivedData[i].taskDescription = 'task description';
                         receivedData[i].finish = new Date(receivedData[i].finish);
                     }
                 }
@@ -188,19 +188,35 @@ angular.module('schedulerApp')
                 }
             });
         };
-        //change status
+        //change status in task description
         this.statusChange = function(id, username, flag, taskDescription) {
-            
             for (var i = 0; i < this.taskListArray.length; i++) {
                 if (this.taskListArray[i]._id === id) {
                     this.taskListArray[i].status = flag;
                     if (flag === 'question') {
-                        $window.alert('Send message to your team?');
+                        $window.alert('Send message to your team? ');
                         $http.get('message/' + username + '/' + taskDescription);
                     }
                 }
             }
         };
+
+        this.saveTaskDescription = function(id) {
+            for (var i = 0; i < this.taskListArray.length; i++) {
+                if (this.taskListArray[i]._id === id) {                    
+                    scheduleService.saveTask(this.taskListArray[i]).then(
+                            function(response) {
+                                console.log(response);
+                                
+                            },
+                            function(err) {
+                                console.log(err);
+                            }                                
+                        );                    
+                }
+            }
+        };
+
 
         var taskListArrayStartTime = [];
         var taskListArrayFinishTime = [];
