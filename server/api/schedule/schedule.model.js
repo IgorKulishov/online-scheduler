@@ -12,6 +12,7 @@ var ScheduleSchema = new Schema({
     "month": Number,
     "year": Number,
     "task": String,
+    "taskDescription": String,
     "start": String,
     "finish": String,
     "existName": Boolean

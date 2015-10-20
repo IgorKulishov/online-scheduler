@@ -12,6 +12,7 @@ var newTask = mongoose.Schema({
     "month": Number,
     "year": Number,
     "task": String,
+    "taskDescription": String,
     "start": Number,
     "finish": Number,
     "existName": Boolean

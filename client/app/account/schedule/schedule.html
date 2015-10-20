@@ -84,7 +84,7 @@
 			                {{taskRecord.task}}
 			                <i ng-if="taskRecord.status=='started'" class="glyphicon glyphicon-play" style="color:green"></i>
 			                <i ng-if="taskRecord.status=='paused'" class="glyphicon glyphicon-pause" style="color:yellow"></i>
-			                <i ng-if="taskRecord.status=='dropped'" class="glyphicon glyphicon-thumbs-down" style="color:red"></i>
+					                <!--<i ng-if="taskRecord.status=='dropped'" class="glyphicon glyphicon-thumbs-down" style="color:red"></i>-->
 			                <i ng-if="taskRecord.status=='finished'" class="glyphicon glyphicon-ok-sign" style="color:green"></i>
 			                <i ng-if="taskRecord.status=='question'" class="glyphicon glyphicon-question-sign" style="color:red"></i>
 			              </button>
@@ -100,19 +100,19 @@
 							  <table>
 							    <tr>
 				            		<td>
-							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'started', taskRecord.taskDescription)">Start..</i>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'started', taskRecord.taskDescription)"><button>Start</button></i>
 				            		</td>
 				            		<td>
-							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'paused', taskRecord.taskDescription)">Pause..</i>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'paused', taskRecord.taskDescription)"><button>Pause</button></i>
+				            		</td>
+						            <!--		<td>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'dropped', taskRecord.taskDescription)">Drop</i>-->
 				            		</td>
 				            		<td>
-							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'dropped', taskRecord.taskDescription)">Drop..</i>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'finished', taskRecord.taskDescription)"><button>Finish</button></i>
 				            		</td>
 				            		<td>
-							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'finished', taskRecord.taskDescription)">Finish..</i>
-				            		</td>
-				            		<td>
-							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'question', taskRecord.taskDescription)">Question</i>
+							            <i style="color:grey" ng-click="ctrl.statusChange(taskRecord._id, taskRecord.username, 'question', taskRecord.taskDescription)"><button>Ask</button></i>
 				            		</td>
 				            	</tr>
 			            	  </table>
