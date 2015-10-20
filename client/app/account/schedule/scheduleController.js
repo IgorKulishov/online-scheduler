@@ -3,7 +3,7 @@
 angular.module('schedulerApp')
     .controller('scheduleController', ['scheduleService', '$http', '$rootScope', '$scope', '$window', '$modal', 'Auth', 'User', '$location', '$cookieStore', function(scheduleService, $http, $rootScope, $scope, $window, $modal, Auth, User, $location, $cookieStore) {
         
-        if (!$cookieStore.get('token'))
+        if (!$cookieStore.get('token')) 
             $location.path('/login');
 
         var self = this;
