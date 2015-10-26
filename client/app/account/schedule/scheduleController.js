@@ -31,7 +31,7 @@ angular.module('schedulerApp')
                         var str = result.transcript;
                         var date = new Date(str);
                         //alert(date);
-                        sendMessageToDom('October 6 2015');
+                        sendMessageToDom('date');
                     });
                 } else {
                     alert(result.transcript);
