@@ -33,7 +33,7 @@
 	            <!--list of Tasks from taskListArray in JSON-->
 		            <div ng-if="!taskRecord.isEditing && !taskRecord.existName" class="btn-group" dropdown dropdown-append-to-body>
 
-			            <button type="button" class="btn" dropdown-toggle style="width:174px">
+			            <button type="button" class="btn" dropdown-toggle style="width:174px; background-color: #66CCFF">
 			                {{taskRecord.username}}
 			                <i class="glyphicon glyphicon-user" style="color:red"></i>
 			            </button>
@@ -80,7 +80,7 @@
 		              <table>
 		                <tr>
 		                  <td>
-			              <button type="button" class="btn" dropdown-toggle style="text-align:right; width:300px">
+			              <button type="button" class="btn" dropdown-toggle style="text-align:right; width:300px; background-color:#FFCC66">
 			                {{taskRecord.task}}
 			                <i ng-if="taskRecord.status=='started'" class="glyphicon glyphicon-play" style="color:blue"></i>
 				                <!--<i ng-if="taskRecord.status=='paused'" class="glyphicon glyphicon-pause" style="color:yellow"></i>-->
@@ -125,7 +125,7 @@
 				            		</td>
 				            	</tr>
 			            	  </table>
-							
+								
 						</div>
 
 					    <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">

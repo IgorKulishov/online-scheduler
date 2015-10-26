@@ -1,16 +1,44 @@
 'use strict';
 
 angular.module('schedulerApp')
-    .controller('scheduleController', ['scheduleService', '$http', '$rootScope', '$scope', '$window', '$modal', 'Auth', 'User', '$location', '$cookieStore', function(scheduleService, $http, $rootScope, $scope, $window, $modal, Auth, User, $location, $cookieStore) {
-        
-        if (!$cookieStore.get('token')) 
+    .controller('scheduleController', ['scheduleService', '$http', '$rootScope', '$scope', '$window', '$modal', 'Auth', 'User', '$location', '$cookieStore', 'scheduleVoiceService', function(scheduleService, $http, $rootScope, $scope, $window, $modal, Auth, User, $location, $cookieStore, scheduleVoiceService) {
+
+        if (!$cookieStore.get('token')) {
             $location.path('/login');
+        }
 
         var self = this;
         //used for add a task function;
         var enteredMonth;
         var enteredDay;
         var enteredYear;
+
+        //request for local test: taskListArrayRead(10, 6 , 2015);        
+        function sendMessageToDom(date) {
+            $scope.chooseDate(date);
+        }
+
+        if(navigator.userAgent.indexOf("Chrome") != -1 ) {            
+        //Auth.getCurrentUser.name
+            scheduleVoiceService.speak('Hi! This is voice recognition system')
+            scheduleVoiceService.ask('If you want to use voice please say "YES!"', function (err, result) {
+                var date = new Date();
+                date.setYear(2015);
+                if (result.transcript === 'yes') {
+                    scheduleVoiceService.speak('Thank you!');
+                    scheduleVoiceService.ask('Tell me date please', function(err, result) {
+                        scheduleVoiceService.speak('you said' + result.transcript);
+                        var str = result.transcript;
+                        var date = new Date(str);
+                        //alert(date);
+                        sendMessageToDom('October 6 2015');
+                    });
+                } else {
+                    alert(result.transcript);
+                    //scheduleVoiceService.speak(result.transcript);
+                }
+            });
+        }
 
         //DATEPICKER
         $scope.open = function() {
@@ -79,7 +107,7 @@ angular.module('schedulerApp')
         //not save option to use $rootScope to pass token (need to find better way)
         var token = $rootScope.token;
         //function to read 'list' array of tasks from file in data folder
-        var taskListArrayRead = function(month, day, year) {
+        function taskListArrayRead(month, day, year) {
             scheduleService.readList(month, day, year, token).then(function(response) {
                 // Loop to tranfer time from string to time format and to assign default status and taskDescription
                 var receivedData = response.data;
@@ -127,11 +155,12 @@ angular.module('schedulerApp')
             );
         };
         
-        $scope.chooseDate = function(date) {
+        $scope.chooseDate = function chooseDate(date) {            
 
-            var day = date.getDate();
-            var month = date.getMonth() + 1;
-            var year = date.getFullYear();
+            var choosenDay = new Date(date);
+            var day = choosenDay.getDate();
+            var month = choosenDay.getMonth() + 1;
+            var year = choosenDay.getFullYear();
 
             taskListArrayRead(month, day, year);
             enteredMonth = month;
@@ -154,7 +183,7 @@ angular.module('schedulerApp')
         };   
         init();
         //function to add new Task
-        this.addTask = function() {
+        this.addTask = function addTask() {
             //here can be implemented 'bcrypt'-tion to sign packages with x-auth
             var existName = false;
             for (var i = 0; i < this.taskListArray.length; i++) {
