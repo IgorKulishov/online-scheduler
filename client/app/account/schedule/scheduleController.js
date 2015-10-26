@@ -158,9 +158,9 @@ angular.module('schedulerApp')
         $scope.chooseDate = function chooseDate(date) {            
 
             var choosenDay = new Date(date);
-            var day = choosenDay.getDate();
-            var month = choosenDay.getMonth() + 1;
-            var year = choosenDay.getFullYear();
+            var day = parseInt(choosenDay.getDate());
+            var month = parseInt(choosenDay.getMonth() + 1);
+            var year = parseInt(choosenDay.getFullYear());
 
             taskListArrayRead(month, day, year);
             enteredMonth = month;
