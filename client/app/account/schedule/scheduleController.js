@@ -1,40 +1,52 @@
 'use strict';
 
 angular.module('schedulerApp')
-    .controller('scheduleController', ['scheduleService', '$http', '$rootScope', '$scope', '$window', '$modal', 'Auth', 'User', '$location', '$cookieStore', 'scheduleVoiceService', function(scheduleService, $http, $rootScope, $scope, $window, $modal, Auth, User, $location, $cookieStore, scheduleVoiceService) {
+    .controller('scheduleController', ['scheduleService', '$http', '$rootScope', '$scope', '$window', 
+        '$modal', 'Auth', 'User', '$location', '$cookieStore', 'scheduleVoiceService', function(scheduleService, $http, $rootScope, $scope, $window, $modal, Auth, User, $location, $cookieStore, scheduleVoiceService) {
 
-        if (!$cookieStore.get('token')) {
-            $location.path('/login');
-        }
-
+        var confirmStatus = 0;
         var self = this;
         //used for add a task function;
         var enteredMonth;
         var enteredDay;
         var enteredYear;
 
-        //request for local test: taskListArrayRead(10, 6 , 2015);        
-        function sendMessageToDom(date) {
-            $scope.chooseDate(date);
+        if (!$cookieStore.get('token')) {
+            $location.path('/login');
         }
 
-        if(navigator.userAgent.indexOf("Chrome") != -1 ) {            
+        //request for local test: taskListArrayRead(10, 6 , 2015);
+        function sendMessageToDom(date) {
+            console.log(date);
+            $scope.chooseDate(date);
+
+        }
+
+        function askDate() {                
+            scheduleVoiceService.ask('Please tell me date in the format of: Month.. Day.. and Year', function (err, result) {
+                var saidText = result.transcript;
+                scheduleVoiceService.ask('If you said' + saidText + 'please say "YES"', function(err, res) {
+                    if (res.transcript === 'yes') {
+                        var saidDate = saidText.replace(/th/, '')
+                        var date = new Date(saidDate);
+                        sendMessageToDom(date);
+                        scheduleVoiceService.speak("Thank you!");                        
+                    } else {
+                        askDate();
+                    }
+                });
+            });
+        }
+
+        if(navigator.userAgent.indexOf("Chrome") != -1 ) {
         //Auth.getCurrentUser.name
             scheduleVoiceService.speak('Hi! This is voice recognition system')
             scheduleVoiceService.ask('If you want to use voice please say "YES!"', function (err, result) {
-                var date = new Date();
-                date.setYear(2015);
                 if (result.transcript === 'yes') {
                     scheduleVoiceService.speak('Thank you!');
-                    scheduleVoiceService.ask('Tell me date please', function(err, result) {
-                        scheduleVoiceService.speak('you said' + result.transcript);
-                        var str = result.transcript;
-                        var date = new Date(str);
-                        //alert(date);
-                        sendMessageToDom('date');
-                    });
+                    askDate();
                 } else {
-                    alert(result.transcript);
+                    scheduleVoiceService.speak("Please choose date manually");
                     //scheduleVoiceService.speak(result.transcript);
                 }
             });
@@ -158,14 +170,15 @@ angular.module('schedulerApp')
         $scope.chooseDate = function chooseDate(date) {            
 
             var choosenDay = new Date(date);
-            var day = parseInt(choosenDay.getDate());
-            var month = parseInt(choosenDay.getMonth() + 1);
-            var year = parseInt(choosenDay.getFullYear());
-
+            var day = choosenDay.getDate();
+            var month = choosenDay.getMonth() + 1;
+            var year = choosenDay.getFullYear();
+            
             taskListArrayRead(month, day, year);
             enteredMonth = month;
             enteredDay = day;
             enteredYear = year;
+
         };
         // function to fill in initial information into the 'add new task' form from 'txt' file
         var init = function() {
