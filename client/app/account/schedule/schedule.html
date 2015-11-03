@@ -13,14 +13,15 @@
 	</div>
     <!--<div ng-if="token && token != '0'">-->
     <div>
-	    <nav class="navbar navbar-default">	
+	    <nav class="navbar navbar-default" style="background-color:#5AA7DF; border-color:#5AA7DF">
 	        <div class="container-fluid">
 			    <div class="row">
 			        <div class="col-md-3">
+			        <p></p>
 			            <p class="input-group">
-			                <input type="text" class="form-control" datepicker-popup="dd MMMM yyyy" ng-model="date" is-open="status" max-date="'22 6 2020'" ng-required="true" close-text="Close" ng-change="chooseDate(date)"/>
+			                <input type="text" class="form-control" style="border-color:#5AA7DF; color:black" datepicker-popup="dd MMMM yyyy" ng-model="date" is-open="status" max-date="'22 6 2020'" ng-required="true" close-text="Close" ng-change="chooseDate(date)" placeholder="Pick date ..   >>"/>
 			                <span class="input-group-btn">
-			                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+			                <button type="button" class="btn btn-default" style="border-color:#5AA7DF; background-color:#5AA7DF; border-color:white" ng-click="open($event)"><i class="glyphicon glyphicon-calendar" style="color:white"></i></button>
 			                </span>
 			            </p>
 			        </div>
@@ -28,12 +29,12 @@
 	   		</div>
         </nav>
 	        <div class="row">
-	        <div class="row" ng-repeat="taskRecord in ctrl.taskListArray | orderBy:'username'">
+	        <div class="row" ng-repeat="taskRecord in ctrl.taskListArray | orderBy:['username', 'start']">
 	            <div class="col-md-2 col2">
 	            <!--list of Tasks from taskListArray in JSON-->
 		            <div ng-if="!taskRecord.isEditing && !taskRecord.existName" class="btn-group" dropdown dropdown-append-to-body>
 
-			            <button type="button" class="btn" dropdown-toggle style="width:174px; background-color: #66CCFF">
+			            <button type="button" class="btn" dropdown-toggle style="width:174px; border-radius:25px; border-color:#459DDB; color:red; border-style:solid; border-width: 1px; background-color:#CEF6F5; font-weight: bold">
 			                {{taskRecord.username}}
 			                <i class="glyphicon glyphicon-user" style="color:red"></i>
 			            </button>
@@ -52,11 +53,11 @@
 		                <input ng-model="taskRecord.username"/>
 		            </div>
 	            </div>
-	            <div class="col-md-2 col3">
+	            <div class="col-md-2 col3" style="width:110px">
 	            <!--list of Tasks from taskListArray in JSON-->	            
-		            <div ng-if="!taskRecord.isEditing">
-		                <h5>{{taskRecord.start | date:'HH:mm'}}</h5>
-		            </div>
+		            <h5 ng-if="!taskRecord.isEditing">
+		                {{taskRecord.start | date:'HH:mm'}}
+		            </h5>
 		            <div ng-if="taskRecord.isEditing">
 		                <timepicker ng-model="taskRecord.start" ng-change="editStart()" hour-step="1" minute-step="15" show-meridian="ismeridian">
 		                </timepicker>
@@ -65,11 +66,11 @@
 	                    </div>
 		            </div>
 	            </div>
-		        <div class="col-md-2 col6">
+		        <div class="col-md-2 col6" style="width:110px">
 	            <!--list of Tasks from taskListArray in JSON-->	            
-		            <div ng-if="!taskRecord.isEditing">
-		                <h5>{{taskRecord.finish| date:'HH:mm'}}</h5>
-		            </div>
+		            <h5 ng-if="!taskRecord.isEditing">
+		                {{taskRecord.finish| date:'HH:mm'}}
+		            </h5>
 		            <div ng-if="taskRecord.isEditing">
    		                <timepicker ng-model="taskRecord.finish" ng-change="editFinish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 		            </div>
@@ -80,7 +81,7 @@
 		              <table>
 		                <tr>
 		                  <td>
-			              <button type="button" class="btn" dropdown-toggle style="text-align:right; width:300px; background-color:#FFCC66">
+			              <button type="button" class="btn" dropdown-toggle style="width:300px; text-align:left; color:black;  background-color:#F8EFAC; border-width:1px; border-radius: 25px">
 			                {{taskRecord.task}}
 			                <i ng-if="taskRecord.status=='started'" class="glyphicon glyphicon-play" style="color:blue"></i>
 				                <!--<i ng-if="taskRecord.status=='paused'" class="glyphicon glyphicon-pause" style="color:yellow"></i>-->
@@ -90,13 +91,13 @@
 			              </button>
 			            </td>
                  		<td ng-click="isCollapsed = !isCollapsed">
-			                <i ng-if="!isCollapsed" class="glyphicon glyphicon-chevron-right" style="color:blue"></i>
-			                <i ng-if="isCollapsed" class="glyphicon glyphicon-chevron-down" style="color:blue"></i>                
+			                <i ng-if="!isCollapsed" class="glyphicon glyphicon-chevron-right" style="color:#5AA7DF"></i>
+			                <i ng-if="isCollapsed" class="glyphicon glyphicon-chevron-down" style="color:#5AA7DF"></i>                
 	            		</td>
 			            </tr>
 			            </table>
 			            <div collapse="!isCollapsed">
-							<input ng-model="taskRecord.taskDescription" ng-change="ctrl.saveTaskDescription(taskRecord._id)" class="well well-lg" style="width:300px; background-color:white" placeholder="Task description"></input>
+							<input ng-model="taskRecord.taskDescription" ng-change="ctrl.saveTaskDescription(taskRecord._id)" class="well well-lg" style="width:300px; background-color:white; border-color:#FE9A2E" placeholder="Task description"></input>
 							  <table>
 							    <tr>
 				            		<td>
@@ -142,7 +143,7 @@
 		            <div ng-if="taskRecord.isEditing">
 		            	<br>
 		            	<br>
-		                <input ng-model="taskRecord.task"/>
+		                <input ng-model="taskRecord.task" style="width:290px"/>
 		            </div>
 	            </div>
 
@@ -193,32 +194,36 @@
 		    </div>
 
 		    <!--ADD NEW TASK PANEL-->
-		    <nav class="navbar navbar-default">
+		    <nav class="navbar navbar-default" style="background-color: #CEF6F5; border-color: #5AA7DF; border-bottom-right-radius:25px; border-bottom-left-radius:25px">
 		        <div class="container-fluid">
 		            <div class="navbar-header">
 	                    <div class="row">
-	                        <div class="col-md-3 col1">
+	                        <div class="col-md-3 col1" style=" color:#5AA7DF">
 	                            <h4>Username</h4>
    	                            <br>
 	                            <br>
 	                            <div>
-	                            <input ng-model="newTask.username" placeholder="username" style="width:161px">
+	                            <input ng-model="newTask.username" placeholder="username.." style="width:161px; color:black; ">
 	                            </div>
 	                        </div>
-	                        <div class="col-md-2 col2">
+	                        <div class="col-md-2 col2" style="color:#5AA7DF">
 	                            <h4>Start</h4>
 		                        <timepicker ng-model="newTaskStart" ng-change="changeStart()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 	                        </div>
-	                        <div class="col-md-2 col3">
+	                        <div class="col-md-2 col3" style="color:#5AA7DF">
 	                            <h4>Finish</h4>
 	                            <timepicker ng-model="newTaskFinish" ng-change="changeFinish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
 	                        </div>
-	                        <div class="col-md-1 col4">
+	                        <div class="col-md-1 col4" style="color:#5AA7DF">
 	                            <h4>Task</h4>
    	                            <br>
 	                            <br>
-	                            <input ng-model="newTask.task"placeholder="Task.." style="width:200px">
+	                            <input ng-model="newTask.task" placeholder="Task.." style="width:280px; color: black">
+	                            <br>
+	                            <br>
+	                            <br>
 	                        </div>
+
 	                    </div>
 	                </div>
 	            </div>
