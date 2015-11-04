@@ -34,7 +34,7 @@
 	            <!--list of Tasks from taskListArray in JSON-->
 		            <div ng-if="!taskRecord.isEditing && !taskRecord.existName" class="btn-group" dropdown dropdown-append-to-body>
 
-			            <button type="button" class="btn" dropdown-toggle style="width:174px; border-radius:25px; border-color:#459DDB; color:red; border-style:solid; border-width: 1px; background-color:#CEF6F5; font-weight: bold">
+			            <button type="button" class="btn" dropdown-toggle style="width:174px; border-radius:25px; background-color:#CEF6F5; font-weight: bold">
 			                {{taskRecord.username}}
 			                <i class="glyphicon glyphicon-user" style="color:red"></i>
 			            </button>
@@ -53,35 +53,34 @@
 		                <input ng-model="taskRecord.username"/>
 		            </div>
 	            </div>
-	            <div class="col-md-2 col3" style="width:110px">
-	            <!--list of Tasks from taskListArray in JSON-->	            
-		            <h5 ng-if="!taskRecord.isEditing">
-		                {{taskRecord.start | date:'HH:mm'}}
-		            </h5>
+	            <div class="col-md-2 col3">
+	            <!--list of Tasks from taskListArray in JSON-->
+		            <button type="button" class="btn" ng-if="!taskRecord.isEditing" class="container-fluid" style="width:170px; font-family:verdana; color:black; background-color:#F8EFAC; border-width:1px; border-radius: 25px">
+		                <div class="col-xs-1 col1">{{taskRecord.start | date:'HH:mm'}}</div>
+		                <div class="col-xs-2 col2">&nbsp;&nbsp;</div>
+		                <div class="col-xs-3 col3">{{taskRecord.finish | date:'HH:mm'}}</div>		             
+		            </button>
 		            <div ng-if="taskRecord.isEditing">
 		                <timepicker ng-model="taskRecord.start" ng-change="editStart()" hour-step="1" minute-step="15" show-meridian="ismeridian">
 		                </timepicker>
+		                <!--TEST NOV 3,2015-->
+			            <div ng-if="taskRecord.isEditing">
+	   		                <timepicker ng-model="taskRecord.finish" ng-change="editFinish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
+			            </div>
+			            <!--END OF TEST-->
 		                <div style="color:red">
 	                        <h5>{{editMessage}}</h5>
 	                    </div>
 		            </div>
 	            </div>
-		        <div class="col-md-2 col6" style="width:110px">
-	            <!--list of Tasks from taskListArray in JSON-->	            
-		            <h5 ng-if="!taskRecord.isEditing">
-		                {{taskRecord.finish| date:'HH:mm'}}
-		            </h5>
-		            <div ng-if="taskRecord.isEditing">
-   		                <timepicker ng-model="taskRecord.finish" ng-change="editFinish()" hour-step="1" minute-step="15" show-meridian="ismeridian"></timepicker>
-		            </div>
-	            </div>
+
 	            <div class="col-md-2 col7">
 	            <!--list of Tasks from taskListArray in JSON-->
 		            <div class="raw" ng-if="!taskRecord.isEditing" class="btn-group" dropdown is-open="status.isopen">
 		              <table>
 		                <tr>
 		                  <td>
-			              <button type="button" class="btn" dropdown-toggle style="width:300px; text-align:left; color:black;  background-color:#F8EFAC; border-width:1px; border-radius: 25px">
+			              <button type="button" class="btn" dropdown-toggle style="width:300px; text-align:left; color:black; background-color:#F8EFAC; border-width:1px; border-radius: 25px">
 			                {{taskRecord.task}}
 			                <i ng-if="taskRecord.status=='started'" class="glyphicon glyphicon-play" style="color:blue"></i>
 				                <!--<i ng-if="taskRecord.status=='paused'" class="glyphicon glyphicon-pause" style="color:yellow"></i>-->
@@ -194,11 +193,11 @@
 		    </div>
 
 		    <!--ADD NEW TASK PANEL-->
-		    <nav class="navbar navbar-default" style="background-color: #CEF6F5; border-color: #5AA7DF; border-bottom-right-radius:25px; border-bottom-left-radius:25px">
+		    <nav class="navbar navbar-default" style="background-color: #CEF6F5; border-color: #CEF6F5; border-bottom-right-radius:25px; border-bottom-left-radius:25px">
 		        <div class="container-fluid">
 		            <div class="navbar-header">
 	                    <div class="row">
-	                        <div class="col-md-3 col1" style=" color:#5AA7DF">
+	                        <div class="col-md-3 col1" style="color:#5AA7DF">
 	                            <h4>Username</h4>
    	                            <br>
 	                            <br>

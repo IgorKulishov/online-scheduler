@@ -41,7 +41,7 @@ angular.module('schedulerApp')
         if(navigator.userAgent.indexOf("Chrome") != -1 ) {
         //Auth.getCurrentUser.name
             scheduleVoiceService.speak('Hi! This is voice recognition system')
-            scheduleVoiceService.ask('If you want to use voice please say "YES!"', function (err, result) {
+            scheduleVoiceService.ask('If you want to use voice please say "YES!"', function (err, result) {                
                 if (result.transcript === 'yes') {
                     scheduleVoiceService.speak('Thank you!');
                     askDate();
