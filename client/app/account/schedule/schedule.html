@@ -29,7 +29,7 @@
 	   		</div>
         </nav>
 	        <div class="row">
-	        <div class="row" ng-repeat="taskRecord in ctrl.taskListArray | orderBy:['username', 'start']">
+	        <div class="row" ng-repeat="taskRecord in ctrl.taskListArray | orderBy:['username', 'start', 'finish']">
 	            <div class="col-md-2 col2">
 	            <!--list of Tasks from taskListArray in JSON-->
 		            <div ng-if="!taskRecord.isEditing && !taskRecord.existName" class="btn-group" dropdown dropdown-append-to-body>
@@ -55,10 +55,10 @@
 	            </div>
 	            <div class="col-md-2 col3">
 	            <!--list of Tasks from taskListArray in JSON-->
-		            <button type="button" class="btn" ng-if="!taskRecord.isEditing" class="container-fluid" style="width:170px; font-family:verdana; color:black; background-color:#F8EFAC; border-width:1px; border-radius: 25px">
+		            <button type="button" class="btn" ng-if="!taskRecord.isEditing" ng-style="taskRecord.style" class="container-fluid" style="width:170px; font-family:verdana; color:black; background-color:#F8EFAC; border-width:1px; border-radius: 25px">
 		                <div class="col-xs-1 col1">{{taskRecord.start | date:'HH:mm'}}</div>
 		                <div class="col-xs-2 col2">&nbsp;&nbsp;</div>
-		                <div class="col-xs-3 col3">{{taskRecord.finish | date:'HH:mm'}}</div>		             
+		                <div class="col-xs-3 col3">{{taskRecord.finish | date:'HH:mm'}}</div>
 		            </button>
 		            <div ng-if="taskRecord.isEditing">
 		                <timepicker ng-model="taskRecord.start" ng-change="editStart()" hour-step="1" minute-step="15" show-meridian="ismeridian">

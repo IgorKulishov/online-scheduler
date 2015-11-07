@@ -41,7 +41,7 @@ angular.module('schedulerApp')
         if(navigator.userAgent.indexOf("Chrome") != -1 ) {
         //Auth.getCurrentUser.name
             scheduleVoiceService.speak('Hi! This is voice recognition system')
-            scheduleVoiceService.ask('If you want to use voice please say "YES!"', function (err, result) {                
+            scheduleVoiceService.ask('If you want to use voice please say "YES!"', function (err, result) {
                 if (result.transcript === 'yes') {
                     scheduleVoiceService.speak('Thank you!');
                     askDate();
@@ -118,6 +118,7 @@ angular.module('schedulerApp')
 
         //not save option to use $rootScope to pass token (need to find better way)
         var token = $rootScope.token;
+        var nowTime = new Date();
         //function to read 'list' array of tasks from file in data folder
         function taskListArrayRead(month, day, year) {
             scheduleService.readList(month, day, year, token).then(function(response) {
@@ -138,6 +139,14 @@ angular.module('schedulerApp')
                 //add first element from server data to empty array
                 existNameArray[0] = self.taskListArray[0];
                 for (var ii = 0; ii < self.taskListArray.length; ii++) {
+                    //asign style for usernames
+                    if ( self.taskListArray[ii].start > nowTime && self.taskListArray[ii].finish > nowTime) {
+                        self.taskListArray[ii].style = {'color':'blue'};
+                    } if ( self.taskListArray[ii].start < nowTime && self.taskListArray[ii].finish < nowTime) {
+                        self.taskListArray[ii].style = {'color':'red'};
+                    } if ( self.taskListArray[ii].start < nowTime && self.taskListArray[ii].finish > nowTime) {
+                        self.taskListArray[ii].style = {'color':'green'};
+                    }
                     //need to make separate function for the second loop
                     var n = existNameArray.length;
                     for (var j = 0; j < n; j++) {
@@ -166,7 +175,7 @@ angular.module('schedulerApp')
                 }
             );
         };
-        
+
         $scope.chooseDate = function chooseDate(date) {            
 
             var choosenDay = new Date(date);

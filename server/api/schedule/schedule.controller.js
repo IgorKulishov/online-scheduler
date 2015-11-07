@@ -29,7 +29,7 @@ exports.index = function(req, res) {
         res.send(404, 'message: wrong date, please choose a date');
     }
     //respond: list of tasks for a day;        
-    Task.find({'month': month, 'day': day, 'year': year}).sort('username').sort('start').exec(function(err, response) {
+    Task.find({'month': month, 'day': day, 'year': year}).sort('username').sort('start').sort('finish').exec(function(err, response) {
         //if error
         if (err) {
             console.error(err);
