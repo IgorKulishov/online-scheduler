@@ -2,7 +2,7 @@
 
 angular.module('schedulerApp')
     .controller('scheduleController', ['scheduleService', '$http', '$rootScope', '$scope', '$window', 
-        '$modal', 'Auth', 'User', '$location', '$cookieStore', 'scheduleVoiceService', function(scheduleService, $http, $rootScope, $scope, $window, $modal, Auth, User, $location, $cookieStore, scheduleVoiceService) {
+        '$modal', 'Auth', 'User', '$location', '$cookieStore', 'scheduleVoiceService', '$interval', function(scheduleService, $http, $rootScope, $scope, $window, $modal, Auth, User, $location, $cookieStore, scheduleVoiceService, $interval) {
 
         var confirmStatus = 0;
         var self = this;
@@ -71,9 +71,6 @@ angular.module('schedulerApp')
             $scope.date = null;
         };
 
-        //COLLAPSE DETAILS
-        $scope.isCollapsed = false;
-
         //WS + MODAL MESSAGE BLOCK
 
         self.wsMessageArray = scheduleService.wsMessage();
@@ -118,11 +115,12 @@ angular.module('schedulerApp')
 
         //not save option to use $rootScope to pass token (need to find better way)
         var token = $rootScope.token;
-        var nowTime = new Date();
+        
         //function to read 'list' array of tasks from file in data folder
         function taskListArrayRead(month, day, year) {
             scheduleService.readList(month, day, year, token).then(function(response) {
                 // Loop to tranfer time from string to time format and to assign default status and taskDescription
+                var nowTime = new Date();
                 var receivedData = response.data;
                 if (receivedData.length !== 0) {
                     for (var i = 0; i < receivedData.length; i++) {
@@ -146,6 +144,7 @@ angular.module('schedulerApp')
                         self.taskListArray[ii].style = {'color':'red'};
                     } if ( self.taskListArray[ii].start < nowTime && self.taskListArray[ii].finish > nowTime) {
                         self.taskListArray[ii].style = {'color':'green'};
+                        self.taskListArray[ii].taskRemain = (self.taskListArray[ii].finish.getHours() - nowTime.getHours()) * 60 + self.taskListArray[ii].finish.getMinutes() - nowTime.getMinutes() + ' m';
                     }
                     //need to make separate function for the second loop
                     var n = existNameArray.length;
@@ -176,7 +175,7 @@ angular.module('schedulerApp')
             );
         };
 
-        $scope.chooseDate = function chooseDate(date) {            
+        $scope.chooseDate = function chooseDate(date) {
 
             var choosenDay = new Date(date);
             var day = choosenDay.getDate();
@@ -184,6 +183,22 @@ angular.module('schedulerApp')
             var year = choosenDay.getFullYear();
             
             taskListArrayRead(month, day, year);
+            $interval(function() {
+                var index = 0;
+                for (var i = 0; i < self.taskListArray.length; i++) {
+                    if ((self.taskListArray[i].isEditing === true) || (self.taskListArray[i].isOpenned === true)) {
+                        index = 1;
+                    } else {
+
+                    }
+                }
+                if (index === 0) {
+                    taskListArrayRead(month, day, year);
+                } else {
+
+                }
+            }, 10000);
+
             enteredMonth = month;
             enteredDay = day;
             enteredYear = year;
@@ -202,7 +217,7 @@ angular.module('schedulerApp')
             }, function(errResponse) {
                 console.log('Error while fetching notes' + errResponse);
             });
-        };   
+        };
         init();
         //function to add new Task
         this.addTask = function addTask() {
@@ -268,15 +283,14 @@ angular.module('schedulerApp')
             }
         };
 
-
         var taskListArrayStartTime = [];
         var taskListArrayFinishTime = [];
         //this function is to edit a Task
         this.edit = function(_id) {
             var arrayId;
             for (var i = 0; i < this.taskListArray.length; i++) {
-                if (this.taskListArray[i]._id === _id) {
-                    this.taskListArray[i].isEditing = true;
+                if (self.taskListArray[i]._id === _id) {
+                    self.taskListArray[i].isEditing = true;
                     arrayId = i;
                 }
             }
@@ -289,6 +303,27 @@ angular.module('schedulerApp')
 
             };
         };
+        // Open/Close task details
+        this.collapse = function(id) {
+            
+            for (var i = 0; i < this.taskListArray.length; i++) {
+                if ((self.taskListArray[i]._id === id) && (!self.taskListArray[i].isOpenned)) {
+                    self.taskListArray[i].isOpenned = true;
+                    break;
+                } if ((self.taskListArray[i]._id === id) && (self.taskListArray[i].isOpenned)) {
+                    self.taskListArray[i].isOpenned = false;
+                }
+            }
+            //to adjust finish time using 'timepicker' in edit mode
+            $scope.editStart = function () {
+
+            };
+            //to adjust finish time using 'timepicker' in edit mode
+            $scope.editFinish = function () {
+
+            };
+        };
+
         //this function is to Save edited Task
         this.save = function(_id) {
             var scheduleOfTeamArray = this.taskListArray;

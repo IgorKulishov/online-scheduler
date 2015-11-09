@@ -34,7 +34,7 @@
 	            <!--list of Tasks from taskListArray in JSON-->
 		            <div ng-if="!taskRecord.isEditing && !taskRecord.existName" class="btn-group" dropdown dropdown-append-to-body>
 
-			            <button type="button" class="btn" dropdown-toggle style="width:174px; border-radius:25px; background-color:#CEF6F5; font-weight: bold">
+			            <button type="button" class="btn" dropdown-toggle style="width:185px; border-radius:25px; background-color:#CEF6F5; font-weight: bold">
 			                {{taskRecord.username}}
 			                <i class="glyphicon glyphicon-user" style="color:red"></i>
 			            </button>
@@ -55,10 +55,12 @@
 	            </div>
 	            <div class="col-md-2 col3">
 	            <!--list of Tasks from taskListArray in JSON-->
-		            <button type="button" class="btn" ng-if="!taskRecord.isEditing" ng-style="taskRecord.style" class="container-fluid" style="width:170px; font-family:verdana; color:black; background-color:#F8EFAC; border-width:1px; border-radius: 25px">
+		            <button type="button" class="btn" ng-if="!taskRecord.isEditing" ng-style="taskRecord.style" class="container-fluid" style="width:195px; font-family:verdana; color:black; background-color:#F8EFAC; border-width:1px; border-radius: 25px">
 		                <div class="col-xs-1 col1">{{taskRecord.start | date:'HH:mm'}}</div>
-		                <div class="col-xs-2 col2">&nbsp;&nbsp;</div>
-		                <div class="col-xs-3 col3">{{taskRecord.finish | date:'HH:mm'}}</div>
+		                <div class="col-xs-2 col2">&nbsp;</div>
+		                <div class="col-xs-2 col3">{{taskRecord.finish | date:'HH:mm'}}</div>
+		                <div class="col-xs-2 col2">&nbsp;</div>
+		                <div class="col-xs-2 col4">{{taskRecord.taskRemain}}</div>
 		            </button>
 		            <div ng-if="taskRecord.isEditing">
 		                <timepicker ng-model="taskRecord.start" ng-change="editStart()" hour-step="1" minute-step="15" show-meridian="ismeridian">
@@ -89,13 +91,13 @@
 			                <i ng-if="taskRecord.status=='question'" class="glyphicon glyphicon-question-sign" style="color:red"></i>
 			              </button>
 			            </td>
-                 		<td ng-click="isCollapsed = !isCollapsed">
-			                <i ng-if="!isCollapsed" class="glyphicon glyphicon-chevron-right" style="color:#5AA7DF"></i>
-			                <i ng-if="isCollapsed" class="glyphicon glyphicon-chevron-down" style="color:#5AA7DF"></i>                
+                 		<td ng-click="ctrl.collapse(taskRecord._id)">
+			                <i ng-if="!taskRecord.isOpenned" class="glyphicon glyphicon-chevron-right" style="color:#5AA7DF"></i>
+			                <i ng-if="taskRecord.isOpenned" class="glyphicon glyphicon-chevron-down" style="color:#5AA7DF"></i>                
 	            		</td>
 			            </tr>
 			            </table>
-			            <div collapse="!isCollapsed">
+			            <div collapse="!taskRecord.isOpenned">
 							<input ng-model="taskRecord.taskDescription" ng-change="ctrl.saveTaskDescription(taskRecord._id)" class="well well-lg" style="width:300px; background-color:white; border-color:#FE9A2E" placeholder="Task description"></input>
 							  <table>
 							    <tr>
@@ -132,7 +134,7 @@
 				            <li role="menuitem"><a href="#">Start task</a></li>
 				            <li role="menuitem"><a href="#">Finish task</a></li>
 				            <li role="menuitem"><a href="#">Pause task</a></li>
-				            <li role="menuitem"><a href="#" ng-click="isCollapsed = !isCollapsed">Details</a></li>
+				            <li role="menuitem"><a href="#" ng-click="ctrl.collapse(taskRecord._id)">Details</a></li>
    				            <li class="divider"></li>
 				            <li role="menuitem" ><a href="#" style="color:blue" ng-click="ctrl.edit(taskRecord._id)">Edit task</a></li>
 				            <li role="menuitem" ><a href="#" style="color:red" ng-click="ctrl.delete(taskRecord._id)" >Delete task</a></li>
