@@ -10,6 +10,7 @@ angular.module('schedulerApp')
         var enteredMonth;
         var enteredDay;
         var enteredYear;
+        var intervalPromise;
 
         if (!$cookieStore.get('token')) {
             $location.path('/login');
@@ -182,8 +183,10 @@ angular.module('schedulerApp')
             var month = choosenDay.getMonth() + 1;
             var year = choosenDay.getFullYear();
             
+            $interval.cancel(intervalPromise);
+
             taskListArrayRead(month, day, year);
-            $interval(function() {
+            intervalPromise = $interval(function() {
                 var index = 0;
                 for (var i = 0; i < self.taskListArray.length; i++) {
                     if ((self.taskListArray[i].isEditing === true) || (self.taskListArray[i].isOpenned === true)) {
