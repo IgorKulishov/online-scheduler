@@ -11,19 +11,17 @@ angular.module('schedulerApp')
         var enteredDay;
         var enteredYear;
         var intervalPromise;
-
+        //checking if token exists (this function is optional and dublicate main functionality on serer side)
         if (!$cookieStore.get('token')) {
             $location.path('/login');
         }
 
-        //request for local test: taskListArrayRead(10, 6 , 2015);
+        //function to open date for voice recognition function askDate();
         function sendMessageToDom(date) {
-            console.log(date);
             $scope.chooseDate(date);
-
         }
-
-        function askDate() {                
+        //function uses voice recognition (asks date)
+        function askDate() {
             scheduleVoiceService.ask('Please tell me date in the format of: Month.. Day.. and Year', function (err, result) {
                 var saidText = result.transcript;
                 scheduleVoiceService.ask('If you said' + saidText + 'please say "YES"', function(err, res) {
@@ -31,14 +29,14 @@ angular.module('schedulerApp')
                         var saidDate = saidText.replace(/th/, '')
                         var date = new Date(saidDate);
                         sendMessageToDom(date);
-                        scheduleVoiceService.speak("Thank you!");                        
+                        scheduleVoiceService.speak("Thank you!");
                     } else {
                         askDate();
                     }
                 });
             });
         }
-
+        //check if Browser is Chrome
         if(navigator.userAgent.indexOf("Chrome") != -1 ) {
         //Auth.getCurrentUser.name
             scheduleVoiceService.speak('Hi! This is voice recognition system')
@@ -72,8 +70,21 @@ angular.module('schedulerApp')
             $scope.date = null;
         };
 
-        //WS + MODAL MESSAGE BLOCK
 
+
+        //--- List of registered Users to show in dropdown menu at 'Add new Task' menu---//        
+        self.registeredUsers = User.query();
+        //self.usernameTest = usernameTest;
+            $scope.newTask = {};
+        self.subMenuClickTest = function(username) {
+            $scope.newTask.username = username;
+        };
+
+        //---END OF TEST AREA---//
+
+
+
+        //WS + MODAL MESSAGE BLOCK
         self.wsMessageArray = scheduleService.wsMessage();
         $rootScope.$on('rootScope:broadcast', function(event, data) {
             if (data.username) {
@@ -192,7 +203,7 @@ angular.module('schedulerApp')
                     if ((self.taskListArray[i].isEditing === true) || (self.taskListArray[i].isOpenned === true)) {
                         index = 1;
                     } else {
-
+                        //there is no condition;
                     }
                 }
                 if (index === 0) {
@@ -272,7 +283,7 @@ angular.module('schedulerApp')
 
         this.saveTaskDescription = function(id) {
             for (var i = 0; i < this.taskListArray.length; i++) {
-                if (this.taskListArray[i]._id === id) {                    
+                if (this.taskListArray[i]._id === id) {
                     scheduleService.saveTask(this.taskListArray[i]).then(
                             function(response) {
                                 console.log(response);
@@ -280,8 +291,8 @@ angular.module('schedulerApp')
                             },
                             function(err) {
                                 console.log(err);
-                            }                                
-                        );                    
+                            }
+                        );
                 }
             }
         };

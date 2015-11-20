@@ -40,11 +40,11 @@
 			            </button>
 					    <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
 				            <li role="menuitem"><a href="#">Replace</a></li>
-				            <li role="menuitem"><a href="#">Personal info</a></li>				            
+				            <li role="menuitem"><a href="#">Personal info</a></li>	            
 				            <li role="menuitem"><a href="#">Record issue</a></li>
 				            <li class="divider"></li>
 				            <li role="menuitem"><a href="#">Send message</a></li>
-					    </ul>		            
+					    </ul>
                     </div>
 
 		            <div ng-if="taskRecord.isEditing">
@@ -203,8 +203,23 @@
 	                            <h4>Username</h4>
    	                            <br>
 	                            <br>
-	                            <div>
-	                            <input ng-model="newTask.username" placeholder="username.." style="width:161px; color:black; ">
+	                            <div dropdown dropdown-append-to-body>
+		                            <input dropdown-toggle ng-model="newTask.username" placeholder="username.." style="width:161px; color:black; ">
+		                            <!--dropdown sub menu with list of registered users-->
+									    <ul class="dropdown-menu" role="menu" aria-labelledby="single-button" style="width:185px">
+								            <div ng-repeat="registeredUsers in ctrl.registeredUsers | filter: newTask.username">
+									            <li role="menuitem">
+									            	<a href="#" ng-click="ctrl.subMenuClickTest(registeredUsers.name)">
+									            		<table style="width:100%">
+										            		<tr>
+										            			<td>{{registeredUsers.name}}</td>
+										            		</tr>
+										            	</table>
+									            	</a>
+									            </li>
+									            <li class="divider"></li>
+								            </div>
+									    </ul>
 	                            </div>
 	                        </div>
 	                        <div class="col-md-2 col2" style="color:#5AA7DF">
